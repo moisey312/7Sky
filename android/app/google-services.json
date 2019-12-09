@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "887014485283",
+    "firebase_url": "https://photorf-4069c.firebaseio.com",
+    "project_id": "photorf-4069c",
+    "storage_bucket": "photorf-4069c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887014485283:android:7da5c7b86c8b8542dc3096",
+        "android_client_info": {
+          "package_name": "com.example.testproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887014485283-2g2vn7iamiqume34vm9ooh0ks1hn5755.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP5963y-GHbbz1JjDo8Zeh7yCU3CYPOWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887014485283-2g2vn7iamiqume34vm9ooh0ks1hn5755.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
