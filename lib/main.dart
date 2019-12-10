@@ -12,6 +12,9 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
         title: '7 sky',
         debugShowCheckedModeBanner: false,
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
         home: new RootPage(auth: new Auth()));
   }
 }
