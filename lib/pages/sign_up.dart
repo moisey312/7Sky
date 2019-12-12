@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testproj/services/authentication.dart';
+import 'package:testproj/style.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({this.auth, this.loginCallback});
@@ -18,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   String _password;//локальная переменная пароля
   String _errorMessage;
 
-    bool _isLoginForm;
+  bool _isLoginForm;
   bool _isLoading;
 
   // Check if form is valid before perform login or signup
@@ -92,6 +93,9 @@ class _SignUpState extends State<SignUp> {
     return new Scaffold(
         body: Stack(
           children: <Widget>[
+            Container(
+              decoration: backgroundImage(),
+            ),
             _showForm(),
             _showCircularProgress(),
           ],
@@ -149,11 +153,13 @@ class _SignUpState extends State<SignUp> {
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white
+        ),
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Email',
-            ),
+        decoration: inputDecoration('E-mail'),
         validator: (value) => value.isEmpty ? 'Email не может быть пустым' : null,
         onSaved: (value) => _email = value.trim(),
       ),
@@ -166,10 +172,12 @@ class _SignUpState extends State<SignUp> {
       child: new TextFormField(
         maxLines: 1,
         obscureText: true,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.white
+        ),
         autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Пароль',
-            ),
+        decoration: inputDecoration('Пароль'),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
         onSaved: (value) => _password = value.trim(),
       ),
@@ -180,7 +188,10 @@ class _SignUpState extends State<SignUp> {
     return new FlatButton(
         child: new Text(
             _isLoginForm ? 'Зарегестрироваться' : 'Уже есть аккаунт',
-            style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.0
+            )),
         onPressed: toggleFormMode);
   }
   //тоже нестатическая кнопка, меняется по тому же принципу
@@ -193,7 +204,7 @@ class _SignUpState extends State<SignUp> {
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.blue,
+            color: Color.fromRGBO(255, 82, 42, 1),
             child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: validateAndSubmit,
