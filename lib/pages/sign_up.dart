@@ -18,7 +18,7 @@ class _SignUpState extends State<SignUp> {
   String _email;//локальная переменная мыла
   String _password;//локальная переменная пароля
   String _errorMessage;
-
+  String _name;
   bool _isLoginForm;
   bool _isLoading;
 
@@ -121,6 +121,7 @@ class _SignUpState extends State<SignUp> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              showNameInput(),
               showEmailInput(),
               showPasswordInput(),
               showPrimaryButton(),
@@ -147,10 +148,33 @@ class _SignUpState extends State<SignUp> {
       );
     }
   }
+  Widget showNameInput(){
+    if(_isLoginForm){
+      return Container(
+        height: 0.0,
+      );
+    }
+    else {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+        child: new TextFormField(
+          maxLines: 1,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white
+          ),
+          autofocus: false,
+          decoration: inputDecoration('Имя'),
+          validator: (value) => value.isEmpty ? 'Имя не может быть пустым' : null,
+          onSaved: (value) => _name = value.trim(),
+        ),
+      );
+    }
+  }
   //виджет поля мыла
   Widget showEmailInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+      padding: _isLoginForm? const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0) : const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         textAlign: TextAlign.center,
