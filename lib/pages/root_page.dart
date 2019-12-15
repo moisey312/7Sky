@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testproj/pages/sign_up.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/pages/home_page.dart';
+import 'package:testproj/navigation_bar_controller.dart';
 enum AuthStatus {
   NOT_DETERMINED,
   NOT_LOGGED_IN,
@@ -76,7 +77,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new HomePage(
+          return new BottomNavigationBarController(
             userId: _userId,
             auth: widget.auth,
             logoutCallback: logoutCallback,
