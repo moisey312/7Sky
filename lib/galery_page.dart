@@ -10,7 +10,7 @@ class ThirdPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: backgroundColor(),
         appBar: AppBar(
-          title: Text("Галерея"),
+          title: Center(child: Text("Галерея")),
         ),
         body: Stack(
           children: <Widget>[
@@ -105,6 +105,7 @@ class ThirdPage extends StatelessWidget {
                             width: 36,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                border: Border.all(color: Colors.black, width: 1.0),
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image:
@@ -113,20 +114,23 @@ class ThirdPage extends StatelessWidget {
                         ),
                         Column(
                           children: <Widget>[
-                            Text('Michal Jordon'),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,0,8),
+                              child: Text('Michal Jordon'),
+                            ),
                             Container(
-                              height: 16,
+                              height: 20,
                               child: Row(
                                 children: <Widget>[
                                   Text('4.8'),
                                   Container(
-                                    height: 16,
+                                    height: 20,
                                     child: RatingBar(
                                       initialRating: 4.8,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
                                       itemCount: 5,
-                                      itemSize: 16,
+                                      itemSize: 20,
                                       itemPadding:
                                           EdgeInsets.symmetric(horizontal: 4.0),
                                       itemBuilder: (context, _) => Icon(
@@ -148,7 +152,7 @@ class ThirdPage extends StatelessWidget {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
                           child: IconButton(
                             icon: Icon(Icons.favorite),
                           ),

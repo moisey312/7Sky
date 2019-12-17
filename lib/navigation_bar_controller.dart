@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'first_page.dart';
-import 'second_page.dart';
+import 'profile_page.dart';
+import 'favorite_page.dart';
 import 'galery_page.dart';
 import 'services/authentication.dart';
 
@@ -24,10 +24,10 @@ class _BottomNavigationBarControllerState
     ThirdPage(
       key: PageStorageKey('Page1'),
     ),
-    SecondPage(
+    FavoritePage(
       key: PageStorageKey('Page2'),
     ),
-    FirstPage(
+    ProfilePage(
       key: PageStorageKey('Page3'),
     ),
   ];
