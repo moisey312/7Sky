@@ -16,7 +16,7 @@ class FirstPage extends StatelessWidget {
 //        ],
 //      ),
     appBar: new AppBar(
-      title: new Text('Отзывы'),
+      title: new Text('Профиль'),
     ),
       body: ListView.builder(itemBuilder: (context, index) {
         return ListTile(

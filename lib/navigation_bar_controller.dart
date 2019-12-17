@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'first_page.dart';
 import 'second_page.dart';
+import 'galery_page.dart';
 import 'services/authentication.dart';
+
 class BottomNavigationBarController extends StatefulWidget {
-  BottomNavigationBarController({Key key, this.auth, this.userId, this.logoutCallback})
+  BottomNavigationBarController(
+      {Key key, this.auth, this.userId, this.logoutCallback})
       : super(key: key);
 
   final BaseAuth auth;
@@ -18,11 +21,14 @@ class BottomNavigationBarController extends StatefulWidget {
 class _BottomNavigationBarControllerState
     extends State<BottomNavigationBarController> {
   final List<Widget> pages = [
-    FirstPage(
+    ThirdPage(
       key: PageStorageKey('Page1'),
     ),
     SecondPage(
       key: PageStorageKey('Page2'),
+    ),
+    FirstPage(
+      key: PageStorageKey('Page3'),
     ),
   ];
 
@@ -40,15 +46,18 @@ class _BottomNavigationBarControllerState
   int _selectedIndex = 0;
 
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
-    onTap: (int index) => setState(() => _selectedIndex = index),
-    currentIndex: selectedIndex,
-    items: const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-          icon: Icon(Icons.format_list_bulleted), title: Text('Отзывы')),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.star), title: Text('Избранное')),
-    ],
-  );
+        onTap: (int index) => setState(() => _selectedIndex = index),
+        currentIndex: selectedIndex,
+        selectedItemColor: Color.fromRGBO(255, 82, 42, 1.0),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.photo_library), title: Text('Галерея')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), title: Text('Избранное')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_pin), title: Text('Профиль'))
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

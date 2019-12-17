@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-BoxDecoration backgroundImage() {
+BoxDecoration backgroundImageSignIn() {
   return BoxDecoration(
     image: DecorationImage(
       image: AssetImage("assets/background.jpg"),
@@ -8,6 +8,23 @@ BoxDecoration backgroundImage() {
     ),
   );
 }
+Color backgroundColor(){
+  return Color.fromARGB(100, 240, 240, 240);
+}
+MaterialColor colorCustom = MaterialColor(0xFF000D19, color);
+Map<int, Color> color =
+{
+  50:Color.fromRGBO(0,13,25, .1),
+  100:Color.fromRGBO(0,13,25, .2),
+  200:Color.fromRGBO(0,13,25, .3),
+  300:Color.fromRGBO(0,13,25, .4),
+  400:Color.fromRGBO(0,13,25, .5),
+  500:Color.fromRGBO(0,13,25, .6),
+  600:Color.fromRGBO(0,13,25, .7),
+  700:Color.fromRGBO(0,13,25, .8),
+  800:Color.fromRGBO(0,13,25, .9),
+  900:Color.fromRGBO(0,13,25, 1),
+};
 
 InputDecoration inputDecoration(String textHint) {
   return InputDecoration(
@@ -34,3 +51,17 @@ TextStyle textStyle(){
     color: Colors.white
   );
 }
+
+Map<int, Color> colorTheme =
+{
+  50:Color.fromRGBO(0,13,25, .1),
+  100:Color.fromRGBO(0,13,25, .2),
+  200:Color.fromRGBO(0,13,25, .3),
+  300:Color.fromRGBO(0,13,25, .4),
+  400:Color.fromRGBO(0,13,25, .5),
+  500:Color.fromRGBO(0,13,25, .6),
+  600:Color.fromRGBO(0,13,25, .7),
+  700:Color.fromRGBO(0,13,25, .8),
+  800:Color.fromRGBO(0,13,25, .9),
+  900:Color.fromRGBO(0,13,25, 1),
+};

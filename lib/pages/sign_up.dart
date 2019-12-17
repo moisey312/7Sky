@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
@@ -15,8 +17,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final _formKey = new GlobalKey<FormState>();
 
-  String _email;//локальная переменная мыла
-  String _password;//локальная переменная пароля
+  String _email; //локальная переменная мыла
+  String _password; //локальная переменная пароля
   String _errorMessage;
   String _name;
   bool _isLoginForm;
@@ -87,20 +89,29 @@ class _SignUpState extends State<SignUp> {
       _isLoginForm = !_isLoginForm;
     });
   }
+
   //виджет общего экрана
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: backgroundImage(),
+      children: <Widget>[
+        Container(
+          decoration: backgroundImageSignIn(),
+          child: new BackdropFilter(
+            filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+            child: new Container(
+              decoration:
+                  new BoxDecoration(color: Color.fromRGBO(0, 13, 25, 0.75)),
             ),
-            _showForm(),
-            _showCircularProgress(),
-          ],
-        ));
+          ),
+        ),
+         _showForm(),
+        _showCircularProgress(),
+      ],
+    ));
   }
+
   // виджет крутяшки типа загрузки, хочу поменять на горизонтальную прогресс фигню
   Widget _showCircularProgress() {
     if (_isLoading) {
@@ -131,6 +142,7 @@ class _SignUpState extends State<SignUp> {
           ),
         ));
   }
+
   //виджет ошибки
   Widget showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
@@ -148,47 +160,49 @@ class _SignUpState extends State<SignUp> {
       );
     }
   }
-  Widget showNameInput(){
-    if(_isLoginForm){
+
+  Widget showNameInput() {
+    if (_isLoginForm) {
       return Container(
         height: 0.0,
       );
-    }
-    else {
+    } else {
       return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
         child: new TextFormField(
           maxLines: 1,
           textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
           autofocus: false,
           decoration: inputDecoration('Имя'),
-          validator: (value) => value.isEmpty ? 'Имя не может быть пустым' : null,
+          validator: (value) =>
+              value.isEmpty ? 'Имя не может быть пустым' : null,
           onSaved: (value) => _name = value.trim(),
         ),
       );
     }
   }
+
   //виджет поля мыла
   Widget showEmailInput() {
     return Padding(
-      padding: _isLoginForm? const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0) : const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      padding: _isLoginForm
+          ? const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0)
+          : const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white
-        ),
+        style: TextStyle(color: Colors.white),
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: inputDecoration('E-mail'),
-        validator: (value) => value.isEmpty ? 'Email не может быть пустым' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Email не может быть пустым' : null,
         onSaved: (value) => _email = value.trim(),
       ),
     );
   }
+
   //виджет поля пароля
   Widget showPasswordInput() {
     return Padding(
@@ -197,27 +211,25 @@ class _SignUpState extends State<SignUp> {
         maxLines: 1,
         obscureText: true,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white
-        ),
+        style: TextStyle(color: Colors.white),
         autofocus: false,
         decoration: inputDecoration('Пароль'),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Пароль не может быть пустым' : null,
         onSaved: (value) => _password = value.trim(),
       ),
     );
   }
+
   //нестатический виджет текст-кнопки, меняется в зависимости от формы
   Widget showSecondaryButton() {
     return new FlatButton(
         child: new Text(
             _isLoginForm ? 'Зарегестрироваться' : 'Уже есть аккаунт',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0
-            )),
+            style: TextStyle(color: Colors.white, fontSize: 18.0)),
         onPressed: toggleFormMode);
   }
+
   //тоже нестатическая кнопка, меняется по тому же принципу
   Widget showPrimaryButton() {
     return new Padding(

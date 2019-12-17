@@ -1,4 +1,5 @@
 name: testproj
+
 description: A new Flutter project.
 
 version: 1.0.0+1
@@ -9,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_rating_bar: ^3.0.0
 
   cupertino_icons: ^0.1.2
   firebase_auth: ^0.14.0+5
@@ -18,7 +20,13 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
+  uses-material-design: true
   assets:
     - assets/flutter-icon.png
     - assets/background.jpg
+    - assets/examples_photos/example_1.jpg
+    - assets/examples_photos/example_2.jpg
+    - assets/examples_photos/example_3.jpg
+    - assets/examples_photos/example_4.jpg
+    - assets/examples_photos/example_5.jpg
+    - assets/people_photo.jpg
