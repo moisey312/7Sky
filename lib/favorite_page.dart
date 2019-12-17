@@ -6,9 +6,16 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("Избранное")),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          title: Center(child: Text("Избранное",
+          style: TextStyle(
+            fontSize: 17
+          ),)),
+        ),
       ),
+
       body: ListView.builder(itemBuilder: (context, index) {
         return ListTile(
           title: Text('Избранные фото/фотографы/фотостудии ....'),

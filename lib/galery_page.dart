@@ -9,8 +9,14 @@ class ThirdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundColor(),
-        appBar: AppBar(
-          title: Center(child: Text("Галерея")),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            title: Center(child: Text("Галерея",
+              style: TextStyle(
+                  fontSize: 17
+              ),)),
+          ),
         ),
         body: Stack(
           children: <Widget>[
