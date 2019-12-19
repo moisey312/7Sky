@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="testproj"
+        android:label="7 sky"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
