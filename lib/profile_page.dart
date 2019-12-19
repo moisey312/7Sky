@@ -3,9 +3,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/services/authentication.dart';
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget{
   const ProfilePage({Key key}) : super(key: key);
-
+  @override
+  createState() => new _ProfilePage();
+}
+class _ProfilePage extends State<ProfilePage> with
+SingleTickerProviderStateMixin{
+  TabController controller;
+  @override
+  void initState(){
+    controller = new TabController(length: 3, vsync: this);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,45 +123,66 @@ class ProfilePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                 ),
-              ),
-            ),
-            /*new Container(
-              decoration: new BoxDecoration(color: Colors.white),
-              child: new TabBar(
-                controller: _controller,
-                tabs: [
-                  new Tab(
-                    text: 'Address',
-                  ),
-                  new Tab(
-                    text: 'Location',
-                  ),
-                ],
-              ),
-            ),
-            new Container(
-              height: 80.0,
-              child: new TabBarView(
-                controller: _controller,
-                children: <Widget>[
-                  new Card(
-                    child: new ListTile(
-                      leading: const Icon(Icons.home),
-                      title: new TextField(
-                        decoration: const InputDecoration(hintText: 'Search for address...'),
+                child: Stack(
+                  children: <Widget>[
+                    new Container(
+                      decoration: new BoxDecoration(color: Colors.white),
+                      child: new TabBar(
+                        labelColor: Colors.black54,
+                        controller: controller,
+                        tabs: [
+                          new Tab(
+                            text: 'Инфо',
+                          ),
+                          new Tab(
+                            text: 'Портфолио',
+                          ),
+                          new Tab(
+                            text: 'Отзывы',
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  new Card(
-                    child: new ListTile(
-                      leading: const Icon(Icons.location_on),
-                      title: new Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                      trailing: new IconButton(icon: const Icon(Icons.my_location), onPressed: () {}),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0,0),
+                      child: new Container(
+                        height: 80.0,
+                        child: new TabBarView(
+                          controller: controller,
+                          children: <Widget>[
+                            new Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16),
+                                    child: Icon(Icons.phone_android),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16),
+                                    child: Text('+ 7 (903) 764 - 87 - 86',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold
+                                    ),),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+
+                            ),
+                            Container(
+
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),*/
+            ),
+
           ],
         ),
       ),

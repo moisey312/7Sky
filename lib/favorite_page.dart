@@ -16,12 +16,9 @@ class FavoritePage extends StatelessWidget {
         ),
       ),
 
-      body: ListView.builder(itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('Избранные фото/фотографы/фотостудии ....'),
-          subtitle: Text('$index'),
-        );
-      }),
+      body: Container(
+        height: 0,
+      )
     );
   }
 }
