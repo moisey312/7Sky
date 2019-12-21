@@ -51,7 +51,6 @@ TextStyle textStyle(){
     color: Colors.white
   );
 }
-
 Map<int, Color> colorTheme =
 {
   50:Color.fromRGBO(0,13,25, .1),

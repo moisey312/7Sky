@@ -1,21 +1,27 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/services/authentication.dart';
-class ProfilePage extends StatefulWidget{
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
+
   @override
   createState() => new _ProfilePage();
 }
-class _ProfilePage extends State<ProfilePage> with
-SingleTickerProviderStateMixin{
+
+class _ProfilePage extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   TabController controller;
+
   @override
-  void initState(){
+  void initState() {
     controller = new TabController(length: 3, vsync: this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,10 +95,7 @@ SingleTickerProviderStateMixin{
                         children: <Widget>[
                           Text(
                             '4.8',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           RatingBar(
                             initialRating: 4.8,
@@ -126,25 +129,31 @@ SingleTickerProviderStateMixin{
                 child: Stack(
                   children: <Widget>[
                     new Container(
-                      decoration: new BoxDecoration(color: Colors.white),
-                      child: new TabBar(
-                        labelColor: Colors.black54,
-                        controller: controller,
-                        tabs: [
-                          new Tab(
-                            text: 'Инфо',
-                          ),
-                          new Tab(
-                            text: 'Портфолио',
-                          ),
-                          new Tab(
-                            text: 'Отзывы',
-                          )
-                        ],
+                      decoration: new BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(100)),
+                      child: new Material(
+                        color: Colors.black12,
+                        child: new TabBar(
+                          labelColor: Colors.black,
+                          indicatorColor: Color.fromRGBO(255, 82, 42, 1),
+                          controller: controller,
+                          tabs: [
+                            new Tab(
+                              text: 'Инфо',
+                            ),
+                            new Tab(
+                              text: 'Портфолио',
+                            ),
+                            new Tab(
+                              text: 'Отзывы',
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 50, 0,0),
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                       child: new Container(
                         height: 80.0,
                         child: new TabBarView(
@@ -159,11 +168,12 @@ SingleTickerProviderStateMixin{
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 16),
-                                    child: Text('+ 7 (903) 764 - 87 - 86',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold
-                                    ),),
+                                    child: Text(
+                                      '+ 7 (903) 764 - 87 - 86',
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   )
                                 ],
                               ),
@@ -171,9 +181,7 @@ SingleTickerProviderStateMixin{
                             Container(
 
                             ),
-                            Container(
-
-                            ),
+                            Container(),
                           ],
                         ),
                       ),
@@ -182,7 +190,6 @@ SingleTickerProviderStateMixin{
                 ),
               ),
             ),
-
           ],
         ),
       ),
