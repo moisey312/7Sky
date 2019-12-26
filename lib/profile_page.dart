@@ -1,21 +1,27 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/services/authentication.dart';
-class ProfilePage extends StatefulWidget{
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
+
   @override
   createState() => new _ProfilePage();
 }
-class _ProfilePage extends State<ProfilePage> with
-SingleTickerProviderStateMixin{
+
+class _ProfilePage extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   TabController controller;
+
   @override
-  void initState(){
+  void initState() {
     controller = new TabController(length: 3, vsync: this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +87,7 @@ SingleTickerProviderStateMixin{
                             child: Text(
                               'Michal Jordon',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 19),
+                              TextStyle(color: Colors.white, fontSize: 19),
                             )),
                       ),
                       Row(
@@ -89,10 +95,7 @@ SingleTickerProviderStateMixin{
                         children: <Widget>[
                           Text(
                             '4.8',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                           RatingBar(
                             initialRating: 4.8,
@@ -101,10 +104,11 @@ SingleTickerProviderStateMixin{
                             itemCount: 5,
                             itemSize: 20,
                             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
+                            itemBuilder: (context, _) =>
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
                             onRatingUpdate: (rating) {
                               print(rating);
                             },
@@ -144,35 +148,43 @@ SingleTickerProviderStateMixin{
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 50, 0,0),
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                       child: new Container(
                         height: 80.0,
                         child: new TabBarView(
                           controller: controller,
                           children: <Widget>[
-                            new Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16),
-                                    child: Icon(Icons.phone_android),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16),
-                                    child: Text('+ 7 (903) 764 - 87 - 86',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold
-                                    ),),
-                                  )
-                                ],
+                            Container(
+                                child: Column(
+                                  children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Icon(Icons.phone_iphone,
+                                          color: Color.fromRGBO(255, 82, 42, 1),),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 16),
+                                            child: Text(
+                                              '+ 7 (903) 764 - 87 - 86',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                )
+                            ),
+                            Container(),
+
+                            Container(
+                              color: Color.fromRGBO(255, 255, 0, 1),
+                              child: Center(
+                                child: Text(
+                                  "У вас пока нет отзывов",
+                                  style: TextStyle(),
+                                ),
                               ),
-                            ),
-                            Container(
-
-                            ),
-                            Container(
-
                             ),
                           ],
                         ),
@@ -182,7 +194,6 @@ SingleTickerProviderStateMixin{
                 ),
               ),
             ),
-
           ],
         ),
       ),
