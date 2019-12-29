@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:testproj/services/authentication.dart';
 class ProfilePage extends StatefulWidget{
   const ProfilePage({Key key}) : super(key: key);
   @override
