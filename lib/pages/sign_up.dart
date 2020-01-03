@@ -4,23 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
 
-class SignUp extends StatefulWidget {
-  SignUp({this.auth, this.loginCallback});
-
+class SignUpPage extends StatefulWidget {
+  SignUpPage({this.auth, this.loginCallback});
+  static String _name;
   final BaseAuth auth;
   final VoidCallback loginCallback;
-
+  // ignore: non_constant_identifier_names
+  String return_name(){
+    return _name;
+  }
   @override
-  State<StatefulWidget> createState() => new _SignUpState();
+  State<StatefulWidget> createState() => new _SignUpPageState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = new GlobalKey<FormState>();
 
   String _email; //локальная переменная мыла
   String _password; //локальная переменная пароля
   String _errorMessage;
-  String _name;
+
   bool _isLoginForm;
   bool _isLoading;
 
@@ -177,7 +180,7 @@ class _SignUpState extends State<SignUp> {
           decoration: inputDecoration('Имя'),
           validator: (value) =>
               value.isEmpty ? 'Имя не может быть пустым' : null,
-          onSaved: (value) => _name = value.trim(),
+          onSaved: (value) => SignUpPage._name = value.trim(),
         ),
       );
     }
