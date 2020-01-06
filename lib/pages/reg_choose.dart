@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:testproj/style.dart';
-
+import 'sign_up.dart';
+import 'package:testproj/models/firestore.dart';
 class RegChoose extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,10 @@ class RegChoose extends StatelessWidget {
                 child: FlatButton(
                   child: Text("Пользователь",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
-                  onPressed: () {},
+                  onPressed: () {
+                    FireStoreFuns.typeId = 0;
+                    Navigator.pop(context);
+                  },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(100),
@@ -54,7 +59,10 @@ class RegChoose extends StatelessWidget {
                     "Фотограф",
                     style: TextStyle(color: Colors.white, fontSize: 13),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    FireStoreFuns.typeId = 1;
+                    Navigator.pop(context);
+                  },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(100),
@@ -70,7 +78,10 @@ class RegChoose extends StatelessWidget {
                 child: FlatButton(
                   child: Text("Студия",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
-                  onPressed: () {},
+                  onPressed: () {
+                    FireStoreFuns.typeId = 2;
+                    Navigator.pop(context);
+                  },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(100),
@@ -80,13 +91,18 @@ class RegChoose extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 150),
-              child: Text(
-                "У меня уже есть аккаунт",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-            )
+                padding: const EdgeInsets.only(top: 150),
+                child: FlatButton(
+                  child: Text(
+                    "У меня уже есть аккаунт",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  onPressed: (){
+                    FireStoreFuns.typeId = null;
+                    Navigator.pop(context);
+                  },
+                ))
           ],
         ),
       ],

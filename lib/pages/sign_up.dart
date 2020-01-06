@@ -1,18 +1,21 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:testproj/pages/reg_choose.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
+import 'package:testproj/models/firestore.dart';
+import 'package:testproj/pages/registration/reg_info.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({this.auth, this.loginCallback});
-  static String _name;
+
   final BaseAuth auth;
   final VoidCallback loginCallback;
+
   // ignore: non_constant_identifier_names
-  String return_name(){
-    return _name;
-  }
+
+
   @override
   State<StatefulWidget> createState() => new _SignUpPageState();
 }
@@ -87,6 +90,12 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void toggleFormMode() {
+    if (!_isLoginForm) {
+      FireStoreFuns.typeId = null;
+    } else {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => RegChoose()));
+    }
     resetForm();
     setState(() {
       _isLoginForm = !_isLoginForm;
@@ -109,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
         ),
-         _showForm(),
+        _showForm(),
         _showCircularProgress(),
       ],
     ));
@@ -180,7 +189,7 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: inputDecoration('Имя'),
           validator: (value) =>
               value.isEmpty ? 'Имя не может быть пустым' : null,
-          onSaved: (value) => SignUpPage._name = value.trim(),
+          onSaved: (value) => FireStoreFuns.name = value.trim(),
         ),
       );
     }
@@ -246,7 +255,9 @@ class _SignUpPageState extends State<SignUpPage> {
             color: Color.fromRGBO(255, 82, 42, 1),
             child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: validateAndSubmit,
+            onPressed: _isLoginForm ? validateAndSubmit : (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Reg_Info()));
+            }//validateAndSubmit,
           ),
         ));
   }
