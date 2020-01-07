@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testproj/models/firestore.dart';
+import 'package:testproj/models/storage.dart';
 import 'package:testproj/pages/registration/sign_up.dart';
 import 'package:testproj/pages/registration/reg_choose.dart';
 //целый класс работы с FireBase аутентификацией
@@ -38,6 +39,7 @@ class Auth implements BaseAuth {
     FireStoreFuns.password = password;
     FireStoreFuns.id = user.uid;
     FireStoreFuns.registration();
+    Storage.uploadProfilePhoto();
     return user.uid;
   }
 

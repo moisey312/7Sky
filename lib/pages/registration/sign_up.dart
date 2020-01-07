@@ -6,6 +6,7 @@ import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/pages/registration/reg_info.dart';
+import 'package:testproj/models/storage.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({this.auth, this.loginCallback});
@@ -13,8 +14,8 @@ class SignUpPage extends StatefulWidget {
   final BaseAuth auth;
   final VoidCallback loginCallback;
   static bool done = false;
-  // ignore: non_constant_identifier_names
 
+  // ignore: non_constant_identifier_names
 
   @override
   State<StatefulWidget> createState() => new _SignUpPageState();
@@ -144,6 +145,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              uploadImageProfile(),
               showNameInput(),
               showEmailInput(),
               showPasswordInput(),
@@ -173,6 +175,54 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  Widget uploadImageProfile() {
+    if (_isLoginForm) {
+      return Container(
+        height: 0.0,
+      );
+    } else {
+      if(Storage.get_image()==null){
+        return Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromRGBO(255, 255, 255, 0),
+              border:
+              Border.all(color: Color.fromRGBO(255, 82, 42, 1), width: 1.0),
+            ),
+            child:IconButton(
+              icon: Icon(
+                Icons.add_a_photo,
+                color: Colors.white,
+              ),
+              onPressed: (){Storage.chooseFile();},
+            )
+          ),
+        );
+      }else{
+        return Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                image: AssetImage(Storage.get_image().path),
+                fit: BoxFit.fill
+              ),
+              border: Border.all(color: Color.fromRGBO(255, 82, 42, 1), width: 1.0)
+            ),
+
+            ),
+        );
+      }
+    }
+  }
+
   Widget showNameInput() {
     if (_isLoginForm) {
       return Container(
@@ -180,7 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
         child: new TextFormField(
           maxLines: 1,
           textAlign: TextAlign.center,
@@ -249,23 +299,26 @@ class _SignUpPageState extends State<SignUpPage> {
         child: SizedBox(
           height: 40.0,
           child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Color.fromRGBO(255, 82, 42, 1),
-            child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
-                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: _isLoginForm ? validateAndSubmit : ()async{
-              final bool result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Reg_Info()));
-              if(result){
-                validateAndSubmit();
-                setState(() {
-                  _isLoginForm = !_isLoginForm;
-                });
-                validateAndSubmit();
-              }
-            }//validateAndSubmit,
-          ),
+              elevation: 5.0,
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0)),
+              color: Color.fromRGBO(255, 82, 42, 1),
+              child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
+                  style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+              onPressed: _isLoginForm
+                  ? validateAndSubmit
+                  : () async {
+                      final bool result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Reg_Info()));
+                      if (result) {
+                        validateAndSubmit();
+                        setState(() {
+                          _isLoginForm = !_isLoginForm;
+                        });
+                        validateAndSubmit();
+                      }
+                    } //validateAndSubmit,
+              ),
         ));
   }
 }

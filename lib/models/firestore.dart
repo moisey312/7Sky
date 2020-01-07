@@ -14,19 +14,28 @@ class FireStoreFuns {
   static String price;
   static void registration() async {
     print(id);
-    await databaseReference.collection("users").document(id).setData({
-      'name': name,
-      'email': email,
-      'typeId': typeId,
-      'city': city,
-      'number': number,
-      'rating': 0,
-      'password': password
 
-    });
     if(typeId!=0){
       await databaseReference.collection("users").document(id).setData({
+        'name': name,
+        'email': email,
+        'typeId': typeId,
+        'city': city,
+        'number': number,
+        'rating': 0.0,
+        'password': password,
         'price': price
+      });
+    }
+    else{
+      await databaseReference.collection("users").document(id).setData({
+        'name': name,
+        'email': email,
+        'typeId': typeId,
+        'city': city,
+        'number': number,
+        'rating': 1.0,
+        'password': password
       });
     }
   }
