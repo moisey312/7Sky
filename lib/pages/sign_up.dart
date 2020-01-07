@@ -12,7 +12,7 @@ class SignUpPage extends StatefulWidget {
 
   final BaseAuth auth;
   final VoidCallback loginCallback;
-
+  static bool done = false;
   // ignore: non_constant_identifier_names
 
 
@@ -255,8 +255,15 @@ class _SignUpPageState extends State<SignUpPage> {
             color: Color.fromRGBO(255, 82, 42, 1),
             child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: _isLoginForm ? validateAndSubmit : (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Reg_Info()));
+            onPressed: _isLoginForm ? validateAndSubmit : ()async{
+              final bool result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Reg_Info()));
+              if(result){
+                validateAndSubmit();
+                setState(() {
+                  _isLoginForm = !_isLoginForm;
+                });
+                validateAndSubmit();
+              }
             }//validateAndSubmit,
           ),
         ));

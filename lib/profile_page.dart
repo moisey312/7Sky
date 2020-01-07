@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'models/firestore.dart';
+import 'package:testproj/services/authentication.dart';
 class ProfilePage extends StatefulWidget{
   const ProfilePage({Key key}) : super(key: key);
   @override
@@ -12,24 +14,119 @@ SingleTickerProviderStateMixin{
   TabController controller;
   @override
   void initState(){
-    controller = new TabController(length: 3, vsync: this);
+    if(FireStoreFuns.typeId==0){
+      controller = new TabController(length: 2, vsync: this);
+    }else{
+      controller = new TabController(length: 3, vsync: this);
+    }
     super.initState();
+  }
+  TabBar tabBar(){
+    if(FireStoreFuns.typeId==0){
+      return TabBar(
+        labelColor: Colors.black54,
+        controller: controller,
+        tabs: [
+          new Tab(
+            text: 'Инфо',
+          ),
+          new Tab(
+            text: 'Мои комментарии',
+          )
+        ],
+      );
+    }
+    else{
+      return TabBar(
+        labelColor: Colors.black54,
+        controller: controller,
+        tabs: [
+          new Tab(
+            text: 'Инфо',
+          ),
+          new Tab(
+            text: 'Портфолио',
+          ),
+          new Tab(
+            text: 'Отзывы',
+          )
+        ],
+      );
+    }
+  }
+  TabBarView tabBarView(){
+    if(FireStoreFuns.typeId==0){
+      return new TabBarView(
+        controller: controller,
+        children: <Widget>[
+          new Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Icon(Icons.phone_android),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(FireStoreFuns.number,
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                )
+              ],
+            ),
+          ),
+          Container(
+
+          )
+        ],
+      );
+    }else{
+      return new TabBarView(
+        controller: controller,
+        children: <Widget>[
+          new Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Icon(Icons.phone_android),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(FireStoreFuns.number,
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                )
+              ],
+            ),
+          ),
+          Container(
+
+          ),
+          Container(
+
+          ),
+        ],
+      );
+    }
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      appBar: new AppBar(
-//        title: new Text('Flutter login demo'),
-//        actions: <Widget>[
-//          new FlatButton(
-//              child: new Text('Logout',
-//                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-//              onPressed: signOut)
-//        ],
-//      ),
       body: Scrollbar(
         child: Stack(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left:8, top: 8),
+              child: new FlatButton(
+                  child: new Text('Logout',
+                      style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+                  onPressed: (){}),
+            ),
             Container(
               height: 298,
               child: Stack(
@@ -78,7 +175,7 @@ SingleTickerProviderStateMixin{
                         child: Container(
                             height: 24,
                             child: Text(
-                              'Michal Jordon',
+                              FireStoreFuns.name,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 19),
                             )),
@@ -87,7 +184,7 @@ SingleTickerProviderStateMixin{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            '4.8',
+                            FireStoreFuns.rating.toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 17
@@ -126,55 +223,13 @@ SingleTickerProviderStateMixin{
                   children: <Widget>[
                     new Container(
                       decoration: new BoxDecoration(color: Colors.white),
-                      child: new TabBar(
-                        labelColor: Colors.black54,
-                        controller: controller,
-                        tabs: [
-                          new Tab(
-                            text: 'Инфо',
-                          ),
-                          new Tab(
-                            text: 'Портфолио',
-                          ),
-                          new Tab(
-                            text: 'Отзывы',
-                          )
-                        ],
-                      ),
+                      child: tabBar()
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 50, 0,0),
                       child: new Container(
                         height: 80.0,
-                        child: new TabBarView(
-                          controller: controller,
-                          children: <Widget>[
-                            new Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16),
-                                    child: Icon(Icons.phone_android),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 16),
-                                    child: Text('+ 7 (903) 764 - 87 - 86',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold
-                                    ),),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-
-                            ),
-                            Container(
-
-                            ),
-                          ],
-                        ),
+                        child: tabBarView()
                       ),
                     ),
                   ],

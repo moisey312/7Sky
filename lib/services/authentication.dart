@@ -25,6 +25,7 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
+    FireStoreFuns.id = user.uid;
     return user.uid;
   }
 
@@ -32,6 +33,9 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
+    FireStoreFuns.email = email;
+    FireStoreFuns.id = user.uid;
+    FireStoreFuns.registration();
     return user.uid;
   }
 

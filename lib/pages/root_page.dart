@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testproj/pages/sign_up.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/navigation_bar_controller.dart';
+import 'package:testproj/models/firestore.dart';
 enum AuthStatus {
   NOT_DETERMINED,
   NOT_LOGGED_IN,
@@ -31,6 +32,8 @@ class _RootPageState extends State<RootPage> {
         }
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+        FireStoreFuns.id = user.uid;
+        FireStoreFuns.getProfile();
       });
     });
   }
