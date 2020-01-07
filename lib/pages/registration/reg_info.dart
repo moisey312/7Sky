@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testproj/models/firestore.dart';
 
 class Reg_Info extends StatelessWidget {
-  ListTile prise() {
+  ListTile price() {
     if (FireStoreFuns.typeId == 0) {
       return ListTile(
         title: Container(
@@ -11,11 +11,15 @@ class Reg_Info extends StatelessWidget {
       );
     } else {
       return ListTile(
-        title: TextFormField(
+        title: TextField(
           maxLines: 1,
           decoration: InputDecoration(
             hintText: 'Цена от',
           ),
+            keyboardType: TextInputType.number,
+          onChanged: (value){
+            FireStoreFuns.price = value;
+          },
         ),
       );
     }
@@ -77,7 +81,7 @@ class Reg_Info extends StatelessWidget {
               },
             ),
           ),
-          prise()
+          price()
         ], context: context)
                 .toList()));
   }
@@ -92,7 +96,7 @@ class Choose_City extends StatelessWidget {
         leading: FlatButton(
           child: IconButton(
             icon: Icon(Icons.arrow_back_ios),
-            color: Colors.white,
+            color: Colors.white, onPressed: () {},
           ),
           onPressed: () {
             Navigator.pop(context, false);

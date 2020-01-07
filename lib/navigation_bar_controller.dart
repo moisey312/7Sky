@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'profile_page.dart';
-import 'favorite_page.dart';
-import 'galery_page.dart';
+import 'pages/profile_page.dart';
+import 'pages/favorite_page.dart';
+import 'pages/galery_page.dart';
 import 'services/authentication.dart';
 
 class BottomNavigationBarController extends StatefulWidget {

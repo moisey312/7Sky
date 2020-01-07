@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testproj/pages/sign_up.dart';
+import 'package:testproj/pages/registration/sign_up.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/navigation_bar_controller.dart';
 import 'package:testproj/models/firestore.dart';

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:testproj/pages/reg_choose.dart';
+import 'package:testproj/pages/registration/reg_choose.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
 import 'package:testproj/models/firestore.dart';

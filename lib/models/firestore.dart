@@ -10,6 +10,8 @@ class FireStoreFuns {
   static String city = '';
   static String number='';
   static double rating;
+  static String password;
+  static String price;
   static void registration() async {
     print(id);
     await databaseReference.collection("users").document(id).setData({
@@ -18,9 +20,17 @@ class FireStoreFuns {
       'typeId': typeId,
       'city': city,
       'number': number,
-      'rating': 0
+      'rating': 0,
+      'password': password
+
     });
+    if(typeId!=0){
+      await databaseReference.collection("users").document(id).setData({
+        'price': price
+      });
+    }
   }
+
 
   static void getProfile() async {
     DocumentReference data = databaseReference.collection('users').document(id);
@@ -31,6 +41,7 @@ class FireStoreFuns {
         name = datasnapshot.data['name'].toString();
         typeId = datasnapshot.data['typeId'];
         rating = datasnapshot.data['rating'];
+        city = datasnapshot.data['city'];
       } else {
         print(id);
         print("No such user");
