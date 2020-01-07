@@ -20,7 +20,7 @@ class Reg_Info extends StatelessWidget {
       );
     }
   }
-
+  TextEditingController startphone = new TextEditingController(text: '+7');
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -57,20 +57,24 @@ class Reg_Info extends StatelessWidget {
         body: ListView(
             children: ListTile.divideTiles(tiles: [
           ListTile(
-            title: Text("Город" + "   "+ FireStoreFuns.city),
+            title: Text("Город" + "   " + FireStoreFuns.city),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Choose_City()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Choose_City()));
             },
           ),
           ListTile(
             title: TextField(
               maxLines: 1,
-              maxLength: 11,
+              maxLength: 12,
+              controller: startphone,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                   hintText: 'Номер телефона',
                   hintStyle: TextStyle(color: Colors.black)),
-              onChanged: (value) => FireStoreFuns.number = value.trim(),
+              onChanged: (value) {
+                FireStoreFuns.number = value.trim();
+              },
             ),
           ),
           prise()
@@ -101,26 +105,27 @@ class Choose_City extends StatelessWidget {
         children: ListTile.divideTiles(tiles: [
           ListTile(
             title: Text('Казань'),
-            onTap: (){
+            onTap: () {
               FireStoreFuns.city = 'Казань';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Иннополис'),
-            onTap: (){
+            onTap: () {
               FireStoreFuns.city = 'Иннополис';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Москва'),
-            onTap: (){
+            onTap: () {
               FireStoreFuns.city = 'Москва';
               Navigator.pop(context);
             },
           ),
-        ], context: context).toList(),
+        ], context: context)
+            .toList(),
       ),
     );
   }

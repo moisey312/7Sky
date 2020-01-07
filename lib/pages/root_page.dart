@@ -32,8 +32,10 @@ class _RootPageState extends State<RootPage> {
         }
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
-        FireStoreFuns.id = user.uid;
-        FireStoreFuns.getProfile();
+        FireStoreFuns.id = user?.uid;
+        if(FireStoreFuns.id!=null){
+          FireStoreFuns.getProfile();
+        }
       });
     });
   }

@@ -78,7 +78,9 @@ SingleTickerProviderStateMixin{
             ),
           ),
           Container(
-
+            child: Center(
+              child: Text('Вы пока не оставляли комментариев'),
+            ),
           )
         ],
       );
@@ -105,10 +107,14 @@ SingleTickerProviderStateMixin{
             ),
           ),
           Container(
-
+              child: Text('У вас пока нет загруженных фотографий'),
           ),
           Container(
-
+              child: Center(
+                child: Text(
+                  'Вам пока не оставляли отзывы'
+                ),
+              ),
           ),
         ],
       );
