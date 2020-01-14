@@ -1,4 +1,0 @@
-#Tue Dec 10 22:43:14 MSK 2019
-base.0=C\:\\Users\\Moise\\seven_sky_flutter\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
