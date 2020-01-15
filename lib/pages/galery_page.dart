@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../style.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ThirdPage extends StatelessWidget {
-  const ThirdPage({Key key}) : super(key: key);
+class GalleryPage extends StatelessWidget {
+  const GalleryPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

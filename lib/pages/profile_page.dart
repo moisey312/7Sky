@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../models/firestore.dart';
 import 'package:testproj/services/authentication.dart';
-
+import 'home_page.dart';
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key}) : super(key: key);
-
+  const ProfilePage({Key key, this.auth, this.logoutCallback}) : super(key: key);
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
   @override
   createState() => new _ProfilePage();
 }

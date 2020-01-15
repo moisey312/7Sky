@@ -90,39 +90,42 @@ class _SignUpPageState extends State<SignUpPage> {
     _errorMessage = "";
   }
 
-  void toggleFormMode() {
+  void toggleFormMode() async {
     if (!_isLoginForm) {
       FireStoreFuns.typeId = null;
     } else {
-      Navigator.push(
+      final bool result = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => RegChoose()));
+      if (result) {
+        resetForm();
+        setState(() {
+          _isLoginForm = !_isLoginForm;
+        });
+      }
     }
-    resetForm();
-    setState(() {
-      _isLoginForm = !_isLoginForm;
-    });
   }
 
   //виджет общего экрана
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
-      children: <Widget>[
-        Container(
-          decoration: backgroundImageSignIn(),
-          child: new BackdropFilter(
-            filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-            child: new Container(
-              decoration:
-                  new BoxDecoration(color: Color.fromRGBO(0, 13, 25, 0.75)),
+          children: <Widget>[
+            Container(
+              decoration: backgroundImageSignIn(),
+              child: new BackdropFilter(
+                filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                child: new Container(
+                  decoration:
+                      new BoxDecoration(color: Color.fromRGBO(0, 13, 25, 0.75)),
+                ),
+              ),
             ),
-          ),
-        ),
-        _showForm(),
-        _showCircularProgress(),
-      ],
-    ));
+            _showForm(),
+            _showCircularProgress(),
+          ],
+        ));
   }
 
   // виджет крутяшки типа загрузки, хочу поменять на горизонтальную прогресс фигню
@@ -136,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  //виджет самого контейнера, который отображается
+  //виджет самой формы, который отображается
   Widget _showForm() {
     return new Container(
         padding: EdgeInsets.all(16.0),
@@ -181,43 +184,42 @@ class _SignUpPageState extends State<SignUpPage> {
         height: 0.0,
       );
     } else {
-      if(Storage.get_image()==null){
+      if (Storage.get_image() == null) {
         return Padding(
           padding: const EdgeInsets.only(top: 40),
           child: Container(
-            height: 70,
-            width: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromRGBO(255, 255, 255, 0),
-              border:
-              Border.all(color: Color.fromRGBO(255, 82, 42, 1), width: 1.0),
-            ),
-            child:IconButton(
-              icon: Icon(
-                Icons.add_a_photo,
-                color: Colors.white,
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color.fromRGBO(255, 255, 255, 0),
+                border: Border.all(
+                    color: Color.fromRGBO(255, 82, 42, 1), width: 1.0),
               ),
-              onPressed: (){Storage.chooseFile();},
-            )
-          ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.add_a_photo,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Storage.chooseFile();
+                },
+              )),
         );
-      }else{
+      } else {
         return Padding(
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             height: 70,
             width: 70,
             decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              image: new DecorationImage(
-                image: AssetImage(Storage.get_image().path),
-                fit: BoxFit.fill
-              ),
-              border: Border.all(color: Color.fromRGBO(255, 82, 42, 1), width: 1.0)
-            ),
-
-            ),
+                shape: BoxShape.circle,
+                image: new DecorationImage(
+                    image: AssetImage(Storage.get_image().path),
+                    fit: BoxFit.fill),
+                border: Border.all(
+                    color: Color.fromRGBO(255, 82, 42, 1), width: 1.0)),
+          ),
         );
       }
     }
@@ -287,7 +289,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget showSecondaryButton() {
     return new FlatButton(
         child: new Text(
-            _isLoginForm ? 'Зарегестрироваться' : 'Уже есть аккаунт',
+            _isLoginForm ? 'Зарегистрироваться' : 'Уже есть аккаунт',
             style: TextStyle(color: Colors.white, fontSize: 18.0)),
         onPressed: toggleFormMode);
   }
@@ -303,7 +305,7 @@ class _SignUpPageState extends State<SignUpPage> {
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0)),
               color: Color.fromRGBO(255, 82, 42, 1),
-              child: new Text(_isLoginForm ? 'Войти' : 'Зарегестрироваться',
+              child: new Text(_isLoginForm ? 'Войти' : 'Зарегистрироваться',
                   style: new TextStyle(fontSize: 20.0, color: Colors.white)),
               onPressed: _isLoginForm
                   ? validateAndSubmit

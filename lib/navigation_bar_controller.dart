@@ -20,17 +20,19 @@ class BottomNavigationBarController extends StatefulWidget {
 
 class _BottomNavigationBarControllerState
     extends State<BottomNavigationBarController> {
-  final List<Widget> pages = [
-    ThirdPage(
+  List<Widget> pages = [
+    GalleryPage(
       key: PageStorageKey('Page1'),
     ),
     FavoritePage(
       key: PageStorageKey('Page2'),
     ),
     ProfilePage(
-      key: PageStorageKey('Page3'),
+      key: PageStorageKey('Page3')
     ),
   ];
+
+
 
   signOut() async {
     try {
@@ -40,7 +42,9 @@ class _BottomNavigationBarControllerState
       print(e);
     }
   }
-
+  void callsignout(){
+    signOut();
+  }
   final PageStorageBucket bucket = PageStorageBucket();
 
   int _selectedIndex = 0;

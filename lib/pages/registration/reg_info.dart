@@ -32,10 +32,8 @@ class Reg_Info extends StatelessWidget {
         appBar: AppBar(
           actions: <Widget>[
             FlatButton(
-              child: Text(
-                'Готово',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Icon(Icons.check,
+              color: Colors.white,),
               onPressed: () {
                 Navigator.pop(context, true);
               },
@@ -44,12 +42,7 @@ class Reg_Info extends StatelessWidget {
           leading: Padding(
               padding: EdgeInsets.only(left: 5, top: 10),
               child: FlatButton(
-                child: Text(
-                  "Отмена",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                child: Icon(Icons.arrow_back, color: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pop(context, false);

@@ -28,4 +28,6 @@ class Storage {
       _uploadedFileURL = fileURL;
     });
   }
+  static create_folder(){
+  }
 }

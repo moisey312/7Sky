@@ -40,7 +40,7 @@ class RegChoose extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
                     FireStoreFuns.typeId = 0;
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
@@ -61,7 +61,7 @@ class RegChoose extends StatelessWidget {
                   ),
                   onPressed: () {
                     FireStoreFuns.typeId = 1;
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
@@ -80,7 +80,7 @@ class RegChoose extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
                     FireStoreFuns.typeId = 2;
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
                   shape: RoundedRectangleBorder(
@@ -100,7 +100,7 @@ class RegChoose extends StatelessWidget {
                   ),
                   onPressed: (){
                     FireStoreFuns.typeId = null;
-                    Navigator.pop(context);
+                    Navigator.pop(context, false);
                   },
                 ))
           ],

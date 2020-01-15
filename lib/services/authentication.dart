@@ -27,7 +27,7 @@ class Auth implements BaseAuth {
         email: email, password: password);
     FirebaseUser user = result.user;
     FireStoreFuns.id = user.uid;
-    FireStoreFuns.getProfile();
+    FireStoreFuns.getMyProfile();
     return user.uid;
   }
 
@@ -51,7 +51,6 @@ class Auth implements BaseAuth {
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
-
   Future<void> sendEmailVerification() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.sendEmailVerification();
