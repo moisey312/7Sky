@@ -5,6 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/models/firestore.dart';
 
 class NewProfilePage extends StatefulWidget {
+  //NewProfilePage({userId: this.userId});
+  //final String userId;
   @override
   createState() => new _NewProfilePage();
 }

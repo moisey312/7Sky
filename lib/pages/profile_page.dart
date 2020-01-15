@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:testproj/pages/root_page.dart';
 import '../models/firestore.dart';
 import 'package:testproj/services/authentication.dart';
 import 'home_page.dart';
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key, this.auth, this.logoutCallback}) : super(key: key);
+  ProfilePage({Key key, this.auth, this.logoutCallback}) : super(key: key);
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   @override
@@ -16,7 +17,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePage extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
-
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   void initState() {
     if (FireStoreFuns.typeId == 0) {
@@ -265,7 +273,21 @@ class _ProfilePage extends State<ProfilePage>
                   Column(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: IconButton(icon: Icon(Icons.exit_to_app, size: 40,),
+                          // ignore: unnecessary_statements
+                          color: Colors.white, onPressed: (){
+                            Auth().signOut();
+                            Navigator.pop(context);
+                            var push = Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => new RootPage(auth: Auth())));
+                              }),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
