@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'models/firestore.dart';
 class ListOfGallery {
   static List<String> PhotographersAndStudios = [];
-  Widget photographer_or_studio(String name, double rating, String prise){
+  static List<Widget> Cards = [];
+  static fill_list_of_cards(){
+    for(int i = 0; i<PhotographersAndStudios.length; i++){
+      PhotographersAndStudios[i];
+      Map info =
+      Cards.add(photographer_or_studio('name',2.6, '2666'));
+    }
+  }
+  static Widget photographer_or_studio(String name, double rating, String price){
     return Container(
       height: 167.0,
       decoration: BoxDecoration(
@@ -133,7 +142,7 @@ class ListOfGallery {
                         Padding(
                           padding:
                           const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(prise),
+                          child: Text(price),
                         )
                       ],
                     ),

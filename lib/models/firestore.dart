@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
 final databaseReference = Firestore.instance;
@@ -61,15 +63,25 @@ class FireStoreFuns {
     });
   }
 
-  static Future<DocumentReference> getPhotographers() async {
-    databaseReference
+  static getPhotographersAndStudiosId() async {
+    List<String> list = [];
+    await databaseReference
         .collection('users')
         .where("typeId", isEqualTo: 1)
         .snapshots()
-        .listen((data) => data.documents.forEach((doc) => ListOfGallery.PhotographersAndStudios.add(doc.toString())));
+        .listen((data) => data.documents.forEach((doc) => list.add(doc.documentID)));
+    await databaseReference
+        .collection('users')
+        .where("typeId", isEqualTo: 2)
+        .snapshots()
+        .listen((data) => data.documents.forEach((doc) => list.add(doc.documentID)));
+    ListOfGallery.PhotographersAndStudios = list;
   }
 
-  static Future<DocumentReference> getUserProfile(String id) async {
-    return databaseReference.collection('user').document(id);
+  static Future<HashMap<String,String>> getUserProfile(String id) async {
+    databaseReference.collection('user').document(id);
+    HashMap<String, String> info = {};
+    info.addEntries('name','name')
+
   }
 }

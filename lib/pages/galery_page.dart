@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../style.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:testproj/list_of_gallery.dart';
+import 'package:testproj/models/firestore.dart';
 class GalleryPage extends StatelessWidget {
   const GalleryPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    FireStoreFuns.getPhotographersAndStudiosId();
+    print(ListOfGallery.PhotographersAndStudios);
     return Scaffold(
         backgroundColor: backgroundColor(),
         appBar: PreferredSize(
