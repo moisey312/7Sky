@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
+
 final databaseReference = Firestore.instance;
 
 class FireStoreFuns {
@@ -69,19 +70,37 @@ class FireStoreFuns {
         .collection('users')
         .where("typeId", isEqualTo: 1)
         .snapshots()
-        .listen((data) => data.documents.forEach((doc) => list.add(doc.documentID)));
+        .listen((data) =>
+            data.documents.forEach((doc) => list.add(doc.documentID)));
     await databaseReference
         .collection('users')
         .where("typeId", isEqualTo: 2)
         .snapshots()
-        .listen((data) => data.documents.forEach((doc) => list.add(doc.documentID)));
+        .listen((data) =>
+            data.documents.forEach((doc) => list.add(doc.documentID)));
     ListOfGallery.PhotographersAndStudios = list;
   }
 
-  static Future<HashMap<String,String>> getUserProfile(String id) async {
-    databaseReference.collection('user').document(id);
-    HashMap<String, String> info = {};
-    info.addEntries('name','name')
-
+  static Future<HashMap<String, Object>> getUserProfile(String id) async {
+    HashMap<String, Object> info = new HashMap();
+    await databaseReference
+        .collection('user')
+        .document(id)
+        .get()
+        .then((datasnapshot) {
+      if (datasnapshot.exists) {
+        info["email"]=datasnapshot.data['email'].toString();
+        info["name"]=datasnapshot.data['name'].toString();
+        info['typeId'] = datasnapshot.data['typeId'];
+        info['rating'] = datasnapshot.data['rating'];
+        info['city'] = datasnapshot.data['city'].toString();
+        info['price'] = datasnapshot.data['price'].toString();
+        info['portfolio_image_names'] = datasnapshot.data['portfolio_image_names'];
+      } else {
+        print(id);
+        print("No such user");
+      }
+    });
+    return info;
   }
 }

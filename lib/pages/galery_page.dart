@@ -9,6 +9,7 @@ class GalleryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FireStoreFuns.getPhotographersAndStudiosId();
+
     print(ListOfGallery.PhotographersAndStudios);
     return Scaffold(
         backgroundColor: backgroundColor(),

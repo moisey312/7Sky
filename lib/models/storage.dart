@@ -30,4 +30,10 @@ class Storage {
   }
   static create_folder(){
   }
+  static Future<String> getUrl(String id, String fileName)async{
+    final ref = FirebaseStorage.instance.ref().child(id + '/portfolio/'+fileName);
+// no need of the file extension, the name will do fine.
+    var url = await ref.getDownloadURL();
+    return url;
+  }
 }
