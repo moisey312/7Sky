@@ -5,8 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/models/firestore.dart';
 
 class NewProfilePage extends StatefulWidget {
-  //NewProfilePage({userId: this.userId});
-  //final String userId;
+  NewProfilePage({this.userId});
+  final String userId;
   @override
   createState() => new _NewProfilePage();
 }
@@ -56,7 +56,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      FireStoreFuns.number,
+                      Database.number,
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     ),
@@ -75,7 +75,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   Padding(
                     padding: const EdgeInsets.only(left: 30, top: 10),
                     child: Text(
-                      FireStoreFuns.email,
+                      Database.email,
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     ),
@@ -102,7 +102,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   ),
                   Container(
                     child: Text(
-                      FireStoreFuns.city,
+                      Database.city,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -123,7 +123,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   ),
                   Container(
                     child: Text(
-                      FireStoreFuns.price,
+                      Database.price,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -200,7 +200,7 @@ class _NewProfilePage extends State<NewProfilePage>
                       child: Container(
                           height: 24,
                           child: Text(
-                            FireStoreFuns.name,
+                            Database.name,
                             style: TextStyle(color: Colors.white, fontSize: 19),
                           )),
                     ),
@@ -208,7 +208,7 @@ class _NewProfilePage extends State<NewProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          FireStoreFuns.rating.toString(),
+                          Database.rating.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 17),
                         ),
                         RatingBar(

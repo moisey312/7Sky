@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:testproj/style.dart';
-import 'sign_up.dart';
 import 'package:testproj/models/firestore.dart';
 class RegChoose extends StatelessWidget {
 
@@ -39,7 +38,7 @@ class RegChoose extends StatelessWidget {
                   child: Text("Пользователь",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
-                    FireStoreFuns.typeId = 0;
+                    Database.typeId = 0;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -60,7 +59,7 @@ class RegChoose extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   onPressed: () {
-                    FireStoreFuns.typeId = 1;
+                    Database.typeId = 1;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -79,7 +78,7 @@ class RegChoose extends StatelessWidget {
                   child: Text("Студия",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
-                    FireStoreFuns.typeId = 2;
+                    Database.typeId = 2;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -99,7 +98,7 @@ class RegChoose extends StatelessWidget {
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   onPressed: (){
-                    FireStoreFuns.typeId = null;
+                    Database.typeId = null;
                     Navigator.pop(context, false);
                   },
                 ))

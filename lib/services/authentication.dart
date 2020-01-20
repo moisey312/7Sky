@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/models/storage.dart';
-import 'package:testproj/pages/registration/sign_up.dart';
-import 'package:testproj/pages/registration/reg_choose.dart';
 //целый класс работы с FireBase аутентификацией
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -26,8 +24,8 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    FireStoreFuns.id = user.uid;
-    FireStoreFuns.getMyProfile();
+    Database.id = user.uid;
+    Database.getMyProfile();
     return user.uid;
   }
 
@@ -35,10 +33,10 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    FireStoreFuns.email = email;
-    FireStoreFuns.password = password;
-    FireStoreFuns.id = user.uid;
-    FireStoreFuns.registration();
+    Database.email = email;
+    Database.password = password;
+    Database.id = user.uid;
+    Database.registration();
     Storage.uploadProfilePhoto();
     return user.uid;
   }

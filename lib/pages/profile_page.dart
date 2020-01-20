@@ -1,15 +1,18 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/pages/root_page.dart';
+import '../choose_photo_for_portfolio.dart';
 import '../models/firestore.dart';
 import 'package:testproj/services/authentication.dart';
-import 'home_page.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker/src/asset.dart';
+
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key, this.auth, this.logoutCallback}) : super(key: key);
-  final BaseAuth auth;
-  final VoidCallback logoutCallback;
+  const ProfilePage({Key key}) : super(key: key);
+
   @override
   createState() => new _ProfilePage();
 }
@@ -17,17 +20,80 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePage extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
-  signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
+  List<Asset> images = List<Asset>();
+
+  void _popupDialog(BuildContext context, int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Удалить?'),
+            content: Text('Удалить выбранную фотографию?'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Нет')),
+              FlatButton(
+                  onPressed: () {setState(() {
+                    images.removeAt(index);
+                  }); Navigator.of(context).pop();},
+                  child: Text('Да')),
+            ],
+          );
+        });
   }
+
+  Widget buildGridView() {
+    return GridView.count(
+      crossAxisCount: 3,
+      padding: EdgeInsets.all(1),
+      children: List.generate(images.length, (index) {
+        Asset asset = images[index];
+        return InkWell(
+          child: Container(
+            child: AssetThumb(
+              asset: asset,
+              width: 300,
+              height: 300,
+            ),
+          ),
+          onTap: (){
+            _popupDialog(context, index);
+          },
+        );
+      }),
+    );
+  }
+
+  Future<void> loadAssets() async {
+
+
+    List<Asset> resultList;
+    String error;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      for(int i = 0; i<resultList.length; i++){
+        images.add(resultList[i]);
+      }
+    });
+  }
+
   @override
   void initState() {
-    if (FireStoreFuns.typeId == 0) {
+    if (Database.typeId == 0) {
       controller = new TabController(length: 2, vsync: this);
     } else {
       controller = new TabController(length: 3, vsync: this);
@@ -36,7 +102,7 @@ class _ProfilePage extends State<ProfilePage>
   }
 
   TabBar tabBar() {
-    if (FireStoreFuns.typeId == 0) {
+    if (Database.typeId == 0) {
       return TabBar(
         labelColor: Colors.black54,
         controller: controller,
@@ -69,7 +135,7 @@ class _ProfilePage extends State<ProfilePage>
   }
 
   Widget tabBarView() {
-    if (FireStoreFuns.typeId == 0) {
+    if (Database.typeId == 0) {
       return TabBarView(
         controller: controller,
         children: <Widget>[
@@ -86,7 +152,7 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        FireStoreFuns.number,
+                        Database.number,
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
@@ -97,20 +163,23 @@ class _ProfilePage extends State<ProfilePage>
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 16, top: 10),
-                      child: Icon(Icons.email,
-                      color: Color.fromRGBO(255, 82, 42, 1),),
+                      child: Icon(
+                        Icons.email,
+                        color: Color.fromRGBO(255, 82, 42, 1),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        FireStoreFuns.email,
+                        Database.email,
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
                 ),
-                Expanded(child:GridView.count(
+                Expanded(
+                    child: GridView.count(
                   physics: new NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   shrinkWrap: true,
@@ -118,21 +187,23 @@ class _ProfilePage extends State<ProfilePage>
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text("Город:",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                        ),),
+                        child: Text(
+                          "Город:",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                     Container(
-
-                      child: Text(FireStoreFuns.city,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                      ),),
+                      child: Text(
+                        Database.city,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
                     )
                   ],
                 )),
@@ -163,8 +234,9 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
-                        FireStoreFuns.number,
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                        Database.number,
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
@@ -173,20 +245,23 @@ class _ProfilePage extends State<ProfilePage>
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 16, top: 10),
-                      child: Icon(Icons.email,
-                        color: Color.fromRGBO(255, 82, 42, 1),),
+                      child: Icon(
+                        Icons.email,
+                        color: Color.fromRGBO(255, 82, 42, 1),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        FireStoreFuns.email,
+                        Database.email,
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
                     )
                   ],
                 ),
-                Expanded(child:GridView.count(
+                Expanded(
+                    child: GridView.count(
                   physics: new NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   shrinkWrap: true,
@@ -194,39 +269,44 @@ class _ProfilePage extends State<ProfilePage>
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text("Город:",
+                        child: Text(
+                          "Город:",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
-                              fontWeight: FontWeight.bold
-                          ),),
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                     Container(
-
-                      child: Text(FireStoreFuns.city,
+                      child: Text(
+                        Database.city,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
-                        ),),
+                        ),
+                      ),
                     ),
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text("Цена от:",
+                        child: Text(
+                          "Цена от:",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
-                              fontWeight: FontWeight.bold
-                          ),),
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                     Container(
-                      child: Text(FireStoreFuns.price,
+                      child: Text(
+                        Database.price,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
-                        ),),
+                        ),
+                      ),
                     ),
                   ],
                 )),
@@ -234,7 +314,29 @@ class _ProfilePage extends State<ProfilePage>
             ),
           ),
           Container(
-            child: Center(child: Text('У вас пока нет загруженных фотографий')),
+            child: Stack(children: <Widget>[
+              images == []
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 42),
+                      child: Align(
+                        child: Text(
+                          'Загрузите ваши фотографии',
+                        ),
+                        alignment: Alignment.topCenter,
+                      ),
+                    )
+                  : buildGridView(),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton(
+                      onPressed: () {loadAssets();},
+                      child: Icon(Icons.add),
+                      backgroundColor: Color.fromRGBO(255, 82, 42, 1),
+                    )),
+              )
+            ]),
           ),
           Container(
             child: Center(
@@ -250,125 +352,133 @@ class _ProfilePage extends State<ProfilePage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-          children: <Widget>[
-            Container(
-              height: 298,
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/people_photo.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: new BackdropFilter(
-                      filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                      child: new Container(
-                        decoration: new BoxDecoration(
-                            color: Color.fromRGBO(0, 13, 25, 0.75)),
-                      ),
+        children: <Widget>[
+          Container(
+            height: 298,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/people_photo.jpg"),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(icon: Icon(Icons.exit_to_app, size: 40,),
-                          // ignore: unnecessary_statements
-                          color: Colors.white, onPressed: (){
-                            Auth().signOut();
-                            Navigator.pop(context);
-                            var push = Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => new RootPage(auth: Auth())));
-                              }),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              height: 58,
-                              width: 58,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Color.fromRGBO(255, 82, 42, 1),
-                                    width: 1.0),
-                                image: DecorationImage(
-                                  image: AssetImage("assets/people_photo.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                  child: new BackdropFilter(
+                    filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                    child: new Container(
+                      decoration: new BoxDecoration(
+                          color: Color.fromRGBO(0, 13, 25, 0.75)),
+                    ),
+                  ),
+                ),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.exit_to_app,
+                              size: 40,
                             ),
-                          ],
-                        ),
+                            // ignore: unnecessary_statements
+                            color: Colors.white,
+                            onPressed: () {
+                              Auth().signOut();
+                              Navigator.pop(context);
+                              var push = Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          new RootPage(auth: Auth())));
+                            }),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            height: 24,
-                            child: Text(
-                              FireStoreFuns.name,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 19),
-                            )),
-                      ),
-                      Row(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            FireStoreFuns.rating.toString(),
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          ),
-                          RatingBar(
-                            initialRating: 4.8,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemSize: 20,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                          Container(
+                            height: 58,
+                            width: 58,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: Color.fromRGBO(255, 82, 42, 1),
+                                  width: 1.0),
+                              image: DecorationImage(
+                                image: AssetImage("assets/people_photo.jpg"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
                           ),
                         ],
-                      )
-                    ],
-                  )
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          height: 24,
+                          child: Text(
+                            Database.name,
+                            style: TextStyle(color: Colors.white, fontSize: 19),
+                          )),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          Database.rating.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                        RatingBar(
+                          initialRating: Database.rating,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          ignoreGestures: true,
+                          itemCount: 5,
+                          itemSize: 25,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
+            child: Container(
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Stack(
+                children: <Widget>[
+                  new Container(
+                      decoration: new BoxDecoration(color: Colors.white),
+                      child: tabBar()),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    child: new Container(child: tabBarView()),
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Stack(
-                  children: <Widget>[
-                    new Container(
-                        decoration: new BoxDecoration(color: Colors.white),
-                        child: tabBar()),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                      child: new Container(child: tabBarView()),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }

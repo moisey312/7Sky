@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:testproj/models/firestore.dart';
 
-class Reg_Info extends StatelessWidget {
+
+// ignore: must_be_immutable
+class RegistrationInfo extends StatelessWidget {
   ListTile price() {
-    if (FireStoreFuns.typeId == 0) {
+    if (Database.typeId == 0) {
       return ListTile(
         title: Container(
           height: 0,
@@ -18,7 +20,7 @@ class Reg_Info extends StatelessWidget {
           ),
             keyboardType: TextInputType.number,
           onChanged: (value){
-            FireStoreFuns.price = value;
+            Database.price = value;
           },
         ),
       );
@@ -54,10 +56,10 @@ class Reg_Info extends StatelessWidget {
         body: ListView(
             children: ListTile.divideTiles(tiles: [
           ListTile(
-            title: Text("Город" + "   " + FireStoreFuns.city),
+            title: Text("Город" + "   " + Database.city),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Choose_City()));
+                  MaterialPageRoute(builder: (context) => ChooseCity()));
             },
           ),
           ListTile(
@@ -70,7 +72,7 @@ class Reg_Info extends StatelessWidget {
                   hintText: 'Номер телефона',
                   hintStyle: TextStyle(color: Colors.black)),
               onChanged: (value) {
-                FireStoreFuns.number = value.trim();
+                Database.number = value.trim();
               },
             ),
           ),
@@ -80,7 +82,7 @@ class Reg_Info extends StatelessWidget {
   }
 }
 
-class Choose_City extends StatelessWidget {
+class ChooseCity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -103,21 +105,21 @@ class Choose_City extends StatelessWidget {
           ListTile(
             title: Text('Казань'),
             onTap: () {
-              FireStoreFuns.city = 'Казань';
+              Database.city = 'Казань';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Иннополис'),
             onTap: () {
-              FireStoreFuns.city = 'Иннополис';
+              Database.city = 'Иннополис';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Москва'),
             onTap: () {
-              FireStoreFuns.city = 'Москва';
+              Database.city = 'Москва';
               Navigator.pop(context);
             },
           ),

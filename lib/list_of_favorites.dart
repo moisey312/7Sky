@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
 import 'models/firestore.dart';
 class ListOfFavorites{
-  List<String> favorites = FireStoreFuns.favorites;
-  void add_to_favorites(String id){
+  List<String> favorites = Database.favorites;
+  void addToFavorites(String id){
     favorites.add(id);
-    FireStoreFuns.favorites = favorites;
+    Database.favorites = favorites;
   }
-  void remove_from_favorites(String id){
+  void removeFromFavorites(String id){
     favorites.remove(id);
-    FireStoreFuns.favorites = favorites;
+    Database.favorites = favorites;
   }
 
 }

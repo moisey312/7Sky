@@ -1,11 +1,9 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
 
 final databaseReference = Firestore.instance;
 
-class FireStoreFuns {
+class Database {
   static String name = '';
   static String id;
   static String email = '';
@@ -15,11 +13,9 @@ class FireStoreFuns {
   static double rating;
   static String password;
   static String price;
-  static List<String> favorites;
-
+  static List favorites;
+  static List portfolioImageNames;
   static void registration() async {
-    print(id);
-
     if (typeId != 0) {
       await databaseReference.collection("users").document(id).setData({
         'name': name,
@@ -30,7 +26,8 @@ class FireStoreFuns {
         'rating': 0.0,
         'favorites': [],
         'password': password,
-        'price': price
+        'price': price,
+        'portfolio_image_names':[]
       });
     } else {
       await databaseReference.collection("users").document(id).setData({
@@ -45,7 +42,24 @@ class FireStoreFuns {
       });
     }
   }
-
+  static void setPortfolioImageNames(String file)async{
+    portfolioImageNames.add(file);
+    await databaseReference.collection('users').document(id).setData({
+      'portfolio_image_names': portfolioImageNames
+    });
+  }
+  static void setFavorites()async{
+    await databaseReference.collection("users").document(id).setData({
+      'favorites':favorites
+    });
+  }
+  static void getPortfolioImageNames()async{
+    await databaseReference.collection('users').document(id).get().then((snapshot){
+      if(snapshot.exists){
+        portfolioImageNames = snapshot.data['portfolio_image_names'].toList();
+      }
+    });
+  }
   static void getMyProfile() async {
     DocumentReference data = databaseReference.collection('users').document(id);
     await data.get().then((datasnapshot) {
@@ -62,40 +76,49 @@ class FireStoreFuns {
         print("No such user");
       }
     });
+    if(typeId!=0){
+      await data.get().then((datasnapshot){
+        if(datasnapshot.exists){
+          price = datasnapshot.data['price'];
+          portfolioImageNames = datasnapshot.data['portfolio_image_names'].toList();
+        }
+      });
+    }
   }
 
   static getPhotographersAndStudiosId() async {
     List<String> list = [];
-    await databaseReference
+    databaseReference
         .collection('users')
-        .where("typeId", isEqualTo: 1)
+        .where('typeId', isEqualTo: 1)
         .snapshots()
         .listen((data) =>
             data.documents.forEach((doc) => list.add(doc.documentID)));
-    await databaseReference
+    databaseReference
         .collection('users')
-        .where("typeId", isEqualTo: 2)
+        .where('typeId', isEqualTo: 2)
         .snapshots()
         .listen((data) =>
             data.documents.forEach((doc) => list.add(doc.documentID)));
-    ListOfGallery.PhotographersAndStudios = list;
+    print(list.toString()+'base');
+    ListOfGallery.photographersAndStudios = list;
   }
 
-  static Future<HashMap<String, Object>> getUserProfile(String id) async {
-    HashMap<String, Object> info = new HashMap();
+  static Future<Map<String, Object>> getUserProfile(String id) async {
+    Map<String, Object> info = new Map();
     await databaseReference
-        .collection('user')
+        .collection('users')
         .document(id)
         .get()
-        .then((datasnapshot) {
-      if (datasnapshot.exists) {
-        info["email"]=datasnapshot.data['email'].toString();
-        info["name"]=datasnapshot.data['name'].toString();
-        info['typeId'] = datasnapshot.data['typeId'];
-        info['rating'] = datasnapshot.data['rating'];
-        info['city'] = datasnapshot.data['city'].toString();
-        info['price'] = datasnapshot.data['price'].toString();
-        info['portfolio_image_names'] = datasnapshot.data['portfolio_image_names'];
+        .then((snapshot) {
+      if (snapshot.exists) {
+        info['email']=snapshot.data['email'].toString();
+        info['name']=snapshot.data['name'].toString();
+        info['typeId'] = snapshot.data['typeId'];
+        info['rating'] = snapshot.data['rating'];
+        info['city'] = snapshot.data['city'].toString();
+        info['price'] = snapshot.data['price'].toString();
+        info['portfolio_image_names'] = snapshot.data['portfolio_image_names'].toList();
       } else {
         print(id);
         print("No such user");

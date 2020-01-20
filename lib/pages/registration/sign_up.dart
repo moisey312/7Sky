@@ -7,7 +7,6 @@ import 'package:testproj/style.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/pages/registration/reg_info.dart';
 import 'package:testproj/models/storage.dart';
-
 class SignUpPage extends StatefulWidget {
   SignUpPage({this.auth, this.loginCallback});
 
@@ -92,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void toggleFormMode() async {
     if (!_isLoginForm) {
-      FireStoreFuns.typeId = null;
+      Database.typeId = null;
     } else {
       final bool result = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => RegChoose()));
@@ -184,7 +183,7 @@ class _SignUpPageState extends State<SignUpPage> {
         height: 0.0,
       );
     } else {
-      if (Storage.get_image() == null) {
+      if (Storage.getImage() == null) {
         return Padding(
           padding: const EdgeInsets.only(top: 40),
           child: Container(
@@ -215,7 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: new BoxDecoration(
                 shape: BoxShape.circle,
                 image: new DecorationImage(
-                    image: AssetImage(Storage.get_image().path),
+                    image: AssetImage(Storage.getImage().path),
                     fit: BoxFit.fill),
                 border: Border.all(
                     color: Color.fromRGBO(255, 82, 42, 1), width: 1.0)),
@@ -241,7 +240,7 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: inputDecoration('Имя'),
           validator: (value) =>
               value.isEmpty ? 'Имя не может быть пустым' : null,
-          onSaved: (value) => FireStoreFuns.name = value.trim(),
+          onSaved: (value) => Database.name = value.trim(),
         ),
       );
     }
@@ -311,7 +310,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ? validateAndSubmit
                   : () async {
                       final bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Reg_Info()));
+                          MaterialPageRoute(builder: (context) => RegistrationInfo()));
                       if (result) {
                         validateAndSubmit();
                         setState(() {
