@@ -86,21 +86,29 @@ class Database {
     }
   }
 
-  static getPhotographersAndStudiosId() async {
+  static getPhotographerAndStudioIds() async {
     List<String> list = [];
-    databaseReference
+
+    final photographers = await databaseReference
         .collection('users')
         .where('typeId', isEqualTo: 1)
-        .snapshots()
-        .listen((data) =>
-            data.documents.forEach((doc) => list.add(doc.documentID)));
-    databaseReference
+        .getDocuments();
+
+    final studios = await databaseReference
         .collection('users')
         .where('typeId', isEqualTo: 2)
-        .snapshots()
-        .listen((data) =>
-            data.documents.forEach((doc) => list.add(doc.documentID)));
-    print(list.toString()+'base');
+        .getDocuments();
+
+    final photographerIDs = photographers.documents.map((doc) {
+      return doc.documentID;
+    });
+    final studioIDs = studios.documents.map((doc) {
+      return doc.documentID;
+    });
+    list.addAll(photographerIDs);
+    list.addAll(studioIDs);
+
+    print(list.toString() + 'base');
     ListOfGallery.photographersAndStudios = list;
   }
 

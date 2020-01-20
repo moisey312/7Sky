@@ -17,7 +17,7 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
       Database.setFavorites();
     }
     if(state==AppLifecycleState.resumed){
-      Database.getPhotographersAndStudiosId();
+      Database.getPhotographerAndStudioIds();
     }
   }
 

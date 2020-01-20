@@ -9,7 +9,7 @@ class ListOfGallery {
   static List<Widget> images;
 
   static loadInfo() async {
-    Database.getPhotographersAndStudiosId();
+    Database.getPhotographerAndStudioIds();
     fillListOfCards();
   }
 
