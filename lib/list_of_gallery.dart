@@ -9,7 +9,7 @@ class ListOfGallery {
   static List<Widget> images;
 
   static loadInfo() async {
-    Database.getPhotographerAndStudioIds();
+    await Database.getPhotographerAndStudioIds();
     fillListOfCards();
   }
 
@@ -79,11 +79,7 @@ class ListOfGallery {
   static Widget photosOrStudiosCard(String name, double rating, String price,
       String id, String profileImageUrl) {
     bool favorite = false;
-    for(int i = 0; i < Database.favorites.length; i++){
-      if(Database.favorites[i]==id){
-        favorite = true;
-      }
-    }
+
     Color fav_col;
     if(favorite){
       fav_col = Color.fromRGBO(255, 82, 42, 1);
@@ -166,14 +162,7 @@ class ListOfGallery {
                   padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
                   child: IconButton(
                     icon: Icon(Icons.favorite, color: fav_col),
-                    onPressed: (){if(favorite){
-                      fav_col = Colors.black38;
-                      Database.favorites.remove(id);
-                    }else{
-                      fav_col = Color.fromRGBO(255, 82, 42, 1);
-                      Database.favorites.add(id);
-                    }
-                    favorite = !favorite;
+                    onPressed: (){
                     },
                   ),
                 )

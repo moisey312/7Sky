@@ -1,89 +1,83 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
+import 'package:testproj/main.dart';
 
 final databaseReference = Firestore.instance;
 
 class Database {
-  static String name = '';
-  static String id;
-  static String email = '';
-  static int typeId;
-  static String city = '';
-  static String number = '';
-  static double rating;
-  static String password;
-  static String price;
-  static List favorites;
-  static List portfolioImageNames;
+  static Map<String, Object> myProfile = new Map();
   static void registration() async {
-    if (typeId != 0) {
-      await databaseReference.collection("users").document(id).setData({
-        'name': name,
-        'email': email,
-        'typeId': typeId,
-        'city': city,
-        'number': number,
+    if (myProfile['typeId'] != 0) {
+      await databaseReference.collection("users").document(myProfile['id']).setData({
+        'name': myProfile['name'],
+        'email': myProfile['email'],
+        'typeId': myProfile['typeId'],
+        'city': myProfile['city'],
+        'number': myProfile['number'],
         'rating': 0.0,
         'favorites': [],
-        'password': password,
-        'price': price,
+        'password': myProfile['password'],
+        'price': myProfile['price'],
         'portfolio_image_names':[]
       });
     } else {
-      await databaseReference.collection("users").document(id).setData({
-        'name': name,
-        'email': email,
-        'typeId': typeId,
-        'city': city,
-        'number': number,
+      await databaseReference.collection("users").document(myProfile['id']).setData({
+        'name': myProfile['name'],
+        'email': myProfile['email'],
+        'typeId': myProfile['typeId'],
+        'city': myProfile['city'],
+        'number': myProfile['number'],
         'favorites': [],
-        'rating': 1.0,
-        'password': password
+        'rating': 0.0,
+        'password': myProfile['password']
       });
     }
   }
   static void setPortfolioImageNames(String file)async{
-    portfolioImageNames.add(file);
-    await databaseReference.collection('users').document(id).setData({
-      'portfolio_image_names': portfolioImageNames
+    List<String> list = myProfile['portfolio_image_names'];
+    list.add(file);
+    myProfile['portfolio_image_names'] = list;
+    await databaseReference.collection('users').document(myProfile['id']).setData({
+      'portfolio_image_names': myProfile['portfolio_image_names']
     });
   }
   static void setFavorites()async{
-    await databaseReference.collection("users").document(id).setData({
-      'favorites':favorites
+    await databaseReference.collection("users").document(myProfile['id']).setData({
+      'favorites':myProfile['favorites']
     });
   }
   static void getPortfolioImageNames()async{
-    await databaseReference.collection('users').document(id).get().then((snapshot){
+    await databaseReference.collection('users').document(myProfile['id']).get().then((snapshot){
       if(snapshot.exists){
-        portfolioImageNames = snapshot.data['portfolio_image_names'].toList();
+        myProfile['portfolio_image_names'] = snapshot.data['portfolio_image_names'].toList();
       }
     });
   }
-  static void getMyProfile() async {
-    DocumentReference data = databaseReference.collection('users').document(id);
+  static Future<bool> getMyProfile() async {
+    DocumentReference data = databaseReference.collection('users').document(myProfile['id']);
     await data.get().then((datasnapshot) {
       if (datasnapshot.exists) {
-        email = datasnapshot.data['email'].toString();
-        number = datasnapshot.data['number'].toString();
-        name = datasnapshot.data['name'].toString();
-        typeId = datasnapshot.data['typeId'];
-        rating = datasnapshot.data['rating'];
-        city = datasnapshot.data['city'];
-        favorites = datasnapshot.data['favorites'];
+        myProfile['email'] = datasnapshot.data['email'].toString();
+        myProfile['number'] = datasnapshot.data['number'].toString();
+        myProfile['name'] = datasnapshot.data['name'].toString();
+        myProfile['typeId'] = datasnapshot.data['typeId'];
+        myProfile['rating'] = datasnapshot.data['rating'];
+        myProfile['city'] = datasnapshot.data['city'];
+        myProfile['favorites'] = datasnapshot.data['favorites'];
       } else {
-        print(id);
+        print(myProfile['id']);
         print("No such user");
       }
     });
-    if(typeId!=0){
+    if(myProfile['typeId']!=0){
       await data.get().then((datasnapshot){
         if(datasnapshot.exists){
-          price = datasnapshot.data['price'];
-          portfolioImageNames = datasnapshot.data['portfolio_image_names'].toList();
+          myProfile['price'] = datasnapshot.data['price'];
+          myProfile['portfolio_image_names'] = datasnapshot.data['portfolio_image_names'].toList();
         }
       });
     }
+    return true;
   }
 
   static getPhotographerAndStudioIds() async {

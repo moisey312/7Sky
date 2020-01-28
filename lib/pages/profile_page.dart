@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:testproj/pages/root_page.dart';
 import '../choose_photo_for_portfolio.dart';
 import '../models/firestore.dart';
@@ -93,16 +94,17 @@ class _ProfilePage extends State<ProfilePage>
 
   @override
   void initState() {
-    if (Database.typeId == 0) {
-      controller = new TabController(length: 2, vsync: this);
+    if (Database.myProfile['typeId'] == 0) {
+      controller = new TabController(length: 2, vsync: this,);
     } else {
       controller = new TabController(length: 3, vsync: this);
     }
+    controller.animateTo(0,duration: Duration(milliseconds: 0));
     super.initState();
   }
 
   TabBar tabBar() {
-    if (Database.typeId == 0) {
+    if (Database.myProfile['typeId'] == 0) {
       return TabBar(
         labelColor: Colors.black54,
         controller: controller,
@@ -135,7 +137,7 @@ class _ProfilePage extends State<ProfilePage>
   }
 
   Widget tabBarView() {
-    if (Database.typeId == 0) {
+    if (Database.myProfile['typeId'] == 0) {
       return TabBarView(
         controller: controller,
         children: <Widget>[
@@ -152,7 +154,7 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        Database.number,
+                        Database.myProfile['number'],
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
@@ -171,7 +173,7 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        Database.email,
+                        Database.myProfile['email'],
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
@@ -198,7 +200,7 @@ class _ProfilePage extends State<ProfilePage>
                     ),
                     Container(
                       child: Text(
-                        Database.city,
+                        Database.myProfile['city'],
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -234,7 +236,7 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
-                        Database.number,
+                        Database.myProfile['number'],
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
@@ -253,7 +255,7 @@ class _ProfilePage extends State<ProfilePage>
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 10),
                       child: Text(
-                        Database.email,
+                        Database.myProfile['email'],
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
@@ -280,7 +282,7 @@ class _ProfilePage extends State<ProfilePage>
                     ),
                     Container(
                       child: Text(
-                        Database.city,
+                        Database.myProfile['city'],
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -301,7 +303,7 @@ class _ProfilePage extends State<ProfilePage>
                     ),
                     Container(
                       child: Text(
-                        Database.price,
+                        Database.myProfile['price'],
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 15,
@@ -351,133 +353,147 @@ class _ProfilePage extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: 298,
-            child: Stack(
+      body: FutureBuilder<bool>(
+        future: Database.getMyProfile(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState==ConnectionState.done){
+            return Stack(
               children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/people_photo.jpg"),
-                      fit: BoxFit.cover,
-                    ),
+                  height: 298,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/people_photo.jpg"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: new BackdropFilter(
+                          filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                          child: new Container(
+                            decoration: new BoxDecoration(
+                                color: Color.fromRGBO(0, 13, 25, 0.75)),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.exit_to_app,
+                                    size: 40,
+                                  ),
+                                  // ignore: unnecessary_statements
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    Auth().signOut();
+                                    Navigator.pop(context);
+                                    var push = Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            new RootPage(auth: Auth())));
+                                  }),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  height: 58,
+                                  width: 58,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Color.fromRGBO(255, 82, 42, 1),
+                                        width: 1.0),
+                                    image: DecorationImage(
+                                      image: AssetImage("assets/people_photo.jpg"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                height: 24,
+                                child: Text(
+                                  Database.myProfile['name'],
+                                  style: TextStyle(color: Colors.white, fontSize: 19),
+                                )),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                Database.myProfile['rating'].toString(),
+                                style: TextStyle(color: Colors.white, fontSize: 17),
+                              ),
+                              RatingBar(
+                                initialRating: Database.myProfile['rating'],
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                ignoreGestures: true,
+                                itemCount: 5,
+                                itemSize: 25,
+                                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                itemBuilder: (context, _) => Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
                   ),
-                  child: new BackdropFilter(
-                    filter: new ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          color: Color.fromRGBO(0, 13, 25, 0.75)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
+                  child: Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        new Container(
+                            decoration: new BoxDecoration(color: Colors.white),
+                            child: tabBar()),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                          child: new Container(child: tabBarView()),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: IconButton(
-                            icon: Icon(
-                              Icons.exit_to_app,
-                              size: 40,
-                            ),
-                            // ignore: unnecessary_statements
-                            color: Colors.white,
-                            onPressed: () {
-                              Auth().signOut();
-                              Navigator.pop(context);
-                              var push = Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          new RootPage(auth: Auth())));
-                            }),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: 58,
-                            width: 58,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color.fromRGBO(255, 82, 42, 1),
-                                  width: 1.0),
-                              image: DecorationImage(
-                                image: AssetImage("assets/people_photo.jpg"),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                          height: 24,
-                          child: Text(
-                            Database.name,
-                            style: TextStyle(color: Colors.white, fontSize: 19),
-                          )),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          Database.rating.toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        ),
-                        RatingBar(
-                          initialRating: Database.rating,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          ignoreGestures: true,
-                          itemCount: 5,
-                          itemSize: 25,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                )
               ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Stack(
-                children: <Widget>[
-                  new Container(
-                      decoration: new BoxDecoration(color: Colors.white),
-                      child: tabBar()),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                    child: new Container(child: tabBarView()),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+            );
+          }
+          else{
+            return Column(
+              children: <Widget>[
+                 Shimmer.fromColors(child: Container(height: 298,), baseColor: Colors.black26, highlightColor: Colors.white),
+              ],
+            );
+          }
+        },
       ),
     );
   }

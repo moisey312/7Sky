@@ -24,7 +24,7 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    Database.id = user.uid;
+    Database.myProfile['id'] = user.uid;
     Database.getMyProfile();
     return user.uid;
   }
@@ -33,9 +33,9 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
-    Database.email = email;
-    Database.password = password;
-    Database.id = user.uid;
+    Database.myProfile['email'] = email;
+    Database.myProfile['password'] = password;
+    Database.myProfile['id'] = user.uid;
     Database.registration();
     Storage.uploadProfilePhoto();
     return user.uid;

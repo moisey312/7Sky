@@ -5,7 +5,7 @@ import 'package:testproj/models/firestore.dart';
 // ignore: must_be_immutable
 class RegistrationInfo extends StatelessWidget {
   ListTile price() {
-    if (Database.typeId == 0) {
+    if (Database.myProfile['typeId'] == 0) {
       return ListTile(
         title: Container(
           height: 0,
@@ -20,7 +20,7 @@ class RegistrationInfo extends StatelessWidget {
           ),
             keyboardType: TextInputType.number,
           onChanged: (value){
-            Database.price = value;
+            Database.myProfile['price'] = value;
           },
         ),
       );
@@ -56,7 +56,7 @@ class RegistrationInfo extends StatelessWidget {
         body: ListView(
             children: ListTile.divideTiles(tiles: [
           ListTile(
-            title: Text("Город" + "   " + Database.city),
+            title: Text(Database.myProfile.containsKey('city')?"Город" + "   " + Database.myProfile['city']:"Город"),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ChooseCity()));
@@ -72,7 +72,7 @@ class RegistrationInfo extends StatelessWidget {
                   hintText: 'Номер телефона',
                   hintStyle: TextStyle(color: Colors.black)),
               onChanged: (value) {
-                Database.number = value.trim();
+                Database.myProfile['number'] = value.trim();
               },
             ),
           ),
@@ -105,21 +105,21 @@ class ChooseCity extends StatelessWidget {
           ListTile(
             title: Text('Казань'),
             onTap: () {
-              Database.city = 'Казань';
+              Database.myProfile['city'] = 'Казань';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Иннополис'),
             onTap: () {
-              Database.city = 'Иннополис';
+              Database.myProfile['city'] = 'Иннополис';
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text('Москва'),
             onTap: () {
-              Database.city = 'Москва';
+              Database.myProfile['city'] = 'Москва';
               Navigator.pop(context);
             },
           ),

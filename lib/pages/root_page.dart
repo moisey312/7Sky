@@ -33,8 +33,8 @@ class _RootPageState extends State<RootPage> {
         }
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
-        Database.id = user?.uid;
-        if(Database.id!=null){
+        Database.myProfile['id'] = user?.uid;
+        if(Database.myProfile['id']!=null){
           Database.getMyProfile();
         }
       });

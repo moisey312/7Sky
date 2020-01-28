@@ -38,7 +38,7 @@ class RegChoose extends StatelessWidget {
                   child: Text("Пользователь",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
-                    Database.typeId = 0;
+                    Database.myProfile['typeId'] = 0;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -59,7 +59,7 @@ class RegChoose extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   onPressed: () {
-                    Database.typeId = 1;
+                    Database.myProfile['typeId'] = 1;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -78,7 +78,7 @@ class RegChoose extends StatelessWidget {
                   child: Text("Студия",
                       style: TextStyle(color: Colors.white, fontSize: 13)),
                   onPressed: () {
-                    Database.typeId = 2;
+                    Database.myProfile['typeId'] = 2;
                     Navigator.pop(context, true);
                   },
                   color: Color.fromRGBO(255, 255, 255, 0.2),
@@ -98,7 +98,7 @@ class RegChoose extends StatelessWidget {
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   onPressed: (){
-                    Database.typeId = null;
+                    Database.myProfile.remove('typeId');
                     Navigator.pop(context, false);
                   },
                 ))

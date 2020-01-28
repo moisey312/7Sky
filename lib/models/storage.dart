@@ -21,7 +21,7 @@ class Storage {
 
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
-        .child(Database.id.toString()+ '/portfolio/'+a.elementAt(0).name);
+        .child(Database.myProfile['id'].toString() + '/portfolio/'+a.elementAt(0).name);
 
     //StorageUploadTask uploadTask = storageReference.putFile();
     //await uploadTask.onComplete;
@@ -39,7 +39,7 @@ class Storage {
   static Future uploadProfilePhoto() async {
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
-        .child(Database.id.toString()+ '/profile.jpg');
+        .child(Database.myProfile['id'].toString()+ '/profile.jpg');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');

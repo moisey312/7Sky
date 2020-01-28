@@ -91,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void toggleFormMode() async {
     if (!_isLoginForm) {
-      Database.typeId = null;
+      Database.myProfile.remove('typeId');
     } else {
       final bool result = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => RegChoose()));
@@ -240,7 +240,7 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: inputDecoration('Имя'),
           validator: (value) =>
               value.isEmpty ? 'Имя не может быть пустым' : null,
-          onSaved: (value) => Database.name = value.trim(),
+          onSaved: (value) => Database.myProfile['name'] = value.trim(),
         ),
       );
     }

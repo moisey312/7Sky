@@ -56,7 +56,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      Database.number,
+                      'number',
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     ),
@@ -75,7 +75,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   Padding(
                     padding: const EdgeInsets.only(left: 30, top: 10),
                     child: Text(
-                      Database.email,
+                      'email',
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                     ),
@@ -102,7 +102,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   ),
                   Container(
                     child: Text(
-                      Database.city,
+                      'city',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -123,7 +123,7 @@ class _NewProfilePage extends State<NewProfilePage>
                   ),
                   Container(
                     child: Text(
-                      Database.price,
+                      'price',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -200,7 +200,7 @@ class _NewProfilePage extends State<NewProfilePage>
                       child: Container(
                           height: 24,
                           child: Text(
-                            Database.name,
+                            'name',
                             style: TextStyle(color: Colors.white, fontSize: 19),
                           )),
                     ),
@@ -208,7 +208,7 @@ class _NewProfilePage extends State<NewProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          Database.rating.toString(),
+                          'rating',
                           style: TextStyle(color: Colors.white, fontSize: 17),
                         ),
                         RatingBar(
