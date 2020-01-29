@@ -81,9 +81,9 @@ class ListOfGallery {
     bool favorite = false;
 
     Color fav_col;
-    if(favorite){
+    if (favorite) {
       fav_col = Color.fromRGBO(255, 82, 42, 1);
-    }else{
+    } else {
       fav_col = Colors.black38;
     }
     return Padding(
@@ -110,7 +110,8 @@ class ListOfGallery {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.black, width: 1.0),
                         image: DecorationImage(
-                            fit: BoxFit.cover, image: NetworkImage(profileImageUrl))),
+                            fit: BoxFit.cover,
+                            image: NetworkImage(profileImageUrl))),
                   ),
                 ),
                 Column(
@@ -162,8 +163,7 @@ class ListOfGallery {
                   padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
                   child: IconButton(
                     icon: Icon(Icons.favorite, color: fav_col),
-                    onPressed: (){
-                    },
+                    onPressed: () {},
                   ),
                 )
               ],

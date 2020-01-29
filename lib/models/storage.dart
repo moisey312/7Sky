@@ -50,7 +50,7 @@ class Storage {
   static createFolderForId(){
   }
   static Future<String> getUrlProfileImage(String id)async{
-    final ref = FirebaseStorage.instance.ref().child('/'+id+'profile.jpg');
+    final ref = FirebaseStorage.instance.ref().child('/'+id+'/profile.jpg');
     var url = await ref.getDownloadURL();
     return url;
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
 import 'package:testproj/main.dart';
+import 'package:testproj/pages/galery_page.dart';
 
 final databaseReference = Firestore.instance;
 
@@ -80,7 +81,7 @@ class Database {
     return true;
   }
 
-  static getPhotographerAndStudioIds() async {
+  static Future<List<String>> getPhotographerAndStudioIds() async {
     List<String> list = [];
 
     final photographers = await databaseReference
@@ -103,7 +104,7 @@ class Database {
     list.addAll(studioIDs);
 
     print(list.toString() + 'base');
-    ListOfGallery.photographersAndStudios = list;
+    return list;
   }
 
   static Future<Map<String, Object>> getUserProfile(String id) async {

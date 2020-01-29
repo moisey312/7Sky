@@ -92,6 +92,10 @@ class _SignUpPageState extends State<SignUpPage> {
   void toggleFormMode() async {
     if (!_isLoginForm) {
       Database.myProfile.remove('typeId');
+      resetForm();
+      setState(() {
+        _isLoginForm = !_isLoginForm;
+      });
     } else {
       final bool result = await Navigator.push(
           context, MaterialPageRoute(builder: (context) => RegChoose()));

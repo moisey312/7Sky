@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:testproj/models/firestore.dart';
 
 class NewProfilePage extends StatefulWidget {
-  NewProfilePage({this.userId});
+  const NewProfilePage({this.userId});
   final String userId;
   @override
   createState() => new _NewProfilePage();
@@ -14,7 +14,6 @@ class NewProfilePage extends StatefulWidget {
 class _NewProfilePage extends State<NewProfilePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
-
   @override
   void initState() {
     controller = new TabController(length: 3, vsync: this);
