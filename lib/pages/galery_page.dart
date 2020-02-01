@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/models/storage.dart';
 import 'package:testproj/pages/new_profile_page.dart';
+import 'package:testproj/shower_photo.dart';
 import '../style.dart';
 import 'package:testproj/list_of_gallery.dart';
 
@@ -28,17 +30,23 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
 
     });
   }
-  static Widget photo(String url) {
+  static Widget photo(BuildContext context, String url) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
-      child: Container(
-        width: 135.0,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(url),
-            fit: BoxFit.cover,
+      child: InkWell(
+        child: Container(
+          width: 135.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(url),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
+        onTap: (){Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => ShowerPhoto(url: url,)));},
       ),
     );
   }
@@ -81,7 +89,7 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                           border: Border.all(color: Colors.black, width: 1.0),
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(profileImageUrl))),
+                              image: CachedNetworkImageProvider(profileImageUrl))),
                     ),
                   ),
                   Column(
@@ -179,7 +187,7 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
       }
 
       for (int j = 0; j < urls.length && j < 5; j++) {
-        images.add(photo(await Storage.getUrlPortfolio(
+        images.add(photo(context, await Storage.getUrlPortfolio(
             photographersAndStudios[i], urls[j])));
       }
       cards.add(photosOrStudiosCard(
