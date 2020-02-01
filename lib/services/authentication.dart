@@ -37,7 +37,6 @@ class Auth implements BaseAuth {
     Database.myProfile['password'] = password;
     Database.myProfile['id'] = user.uid;
     Database.registration();
-    Storage.uploadProfilePhoto();
     return user.uid;
   }
 

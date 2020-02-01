@@ -1,22 +1,16 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart'; // For Image Picker
 import 'package:testproj/models/firestore.dart';
 import 'package:multi_image_picker/src/asset.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
-File _image;
+
 String _uploadedFileURL;
 
 class Storage {
-  static Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      _image = image;
-    });
-  }
-  static File getImage(){
-    return _image;
-  }
+  static String user_photo_url;
   static Future uploadPortfolioPhoto(List<Asset> a ) async{
 
     StorageReference storageReference = FirebaseStorage.instance
@@ -36,18 +30,11 @@ class Storage {
 
     return file;
   }
-  static Future uploadProfilePhoto() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child(Database.myProfile['id'].toString()+ '/profile.jpg');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      _uploadedFileURL = fileURL;
-    });
-  }
-  static createFolderForId(){
+
+  static Future getUrlUserPhoto()async{
+    final ref = FirebaseStorage.instance.ref().child('/'+Database.myProfile['id']+'/'+Database.myProfile['user_photo_name']);
+    var url = await ref.getDownloadURL();
+    user_photo_url = url;
   }
   static Future<String> getUrlProfileImage(String id)async{
     final ref = FirebaseStorage.instance.ref().child('/'+id+'/profile.jpg');

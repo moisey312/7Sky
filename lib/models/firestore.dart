@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testproj/list_of_gallery.dart';
 import 'package:testproj/main.dart';
+import 'package:testproj/models/storage.dart';
 import 'package:testproj/pages/galery_page.dart';
 
 final databaseReference = Firestore.instance;
@@ -38,12 +39,17 @@ class Database {
     List<String> list = myProfile['portfolio_image_names'];
     list.add(file);
     myProfile['portfolio_image_names'] = list;
-    await databaseReference.collection('users').document(myProfile['id']).setData({
+    await databaseReference.collection('users').document(myProfile['id']).updateData({
       'portfolio_image_names': myProfile['portfolio_image_names']
     });
   }
+  static void setUserPhotoName( String id, String name)async{
+    await databaseReference.collection("users").document(id).updateData({
+      'user_photo_name': name
+    });
+  }
   static void setFavorites()async{
-    await databaseReference.collection("users").document(myProfile['id']).setData({
+    await databaseReference.collection("users").document(myProfile['id']).updateData({
       'favorites':myProfile['favorites']
     });
   }
@@ -59,12 +65,14 @@ class Database {
     await data.get().then((datasnapshot) {
       if (datasnapshot.exists) {
         myProfile['email'] = datasnapshot.data['email'].toString();
+        myProfile['user_photo_name'] = datasnapshot.data['user_photo_name'].toString();
         myProfile['number'] = datasnapshot.data['number'].toString();
         myProfile['name'] = datasnapshot.data['name'].toString();
         myProfile['typeId'] = datasnapshot.data['typeId'];
         myProfile['rating'] = datasnapshot.data['rating'];
         myProfile['city'] = datasnapshot.data['city'];
         myProfile['favorites'] = datasnapshot.data['favorites'];
+        myProfile['user_photo_name'] = datasnapshot.data['user_photo_name'];
       } else {
         print(myProfile['id']);
         print("No such user");
@@ -78,6 +86,7 @@ class Database {
         }
       });
     }
+    await Storage.getUrlUserPhoto();
     return true;
   }
 
@@ -116,6 +125,7 @@ class Database {
         .then((snapshot) {
       if (snapshot.exists) {
         info['email']=snapshot.data['email'].toString();
+        info['user_photo_name'] = snapshot.data['user_photo_name'].toString();
         info['name']=snapshot.data['name'].toString();
         info['typeId'] = snapshot.data['typeId'];
         info['rating'] = snapshot.data['rating'];

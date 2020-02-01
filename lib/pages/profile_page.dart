@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,6 +11,7 @@ import '../models/firestore.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:multi_image_picker/src/asset.dart';
+import 'package:testproj/models/storage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -364,7 +366,9 @@ class _ProfilePage extends State<ProfilePage>
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/people_photo.jpg"),
+                    image: Database.myProfile['user_photo_name'] == ''
+                        ? Image.asset('assets/user_photo.png')
+                        : CachedNetworkImageProvider(Storage.user_photo_url),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -414,11 +418,15 @@ class _ProfilePage extends State<ProfilePage>
                                 color: Color.fromRGBO(255, 82, 42, 1),
                                 width: 1.0),
                             image: DecorationImage(
-                              image: AssetImage("assets/people_photo.jpg"),
-                              fit: BoxFit.cover,
+                              image: Database.myProfile['user_photo_name'] == ''
+                                  ? Image.asset('assets/user_photo.png')
+                                  : CachedNetworkImageProvider(
+                                Storage.user_photo_url
+                              ),
+                              fit: BoxFit.cover
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -488,21 +496,23 @@ class _ProfilePage extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Database.myProfile.containsKey('name')?all():FutureBuilder<bool>(
-        future: Database.getMyProfile(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return all();
-          } else {
-            return Shimmer.fromColors(
-                child: Container(
-                  height: 298,
-                ),
-                baseColor: Colors.black26,
-                highlightColor: Colors.white);
-          }
-        },
-      ),
+      body: Database.myProfile.containsKey('name')
+          ? all()
+          : FutureBuilder<bool>(
+              future: Database.getMyProfile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return all();
+                } else {
+                  return Shimmer.fromColors(
+                      child: Container(
+                        height: 298,
+                      ),
+                      baseColor: Colors.black26,
+                      highlightColor: Colors.white);
+                }
+              },
+            ),
     );
   }
 }

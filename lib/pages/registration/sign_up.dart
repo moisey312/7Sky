@@ -1,12 +1,18 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:testproj/pages/registration/reg_choose.dart';
 import 'package:testproj/services/authentication.dart';
 import 'package:testproj/style.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/pages/registration/reg_info.dart';
 import 'package:testproj/models/storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
+
 class SignUpPage extends StatefulWidget {
   SignUpPage({this.auth, this.loginCallback});
 
@@ -29,6 +35,27 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool _isLoginForm;
   bool _isLoading;
+
+  File user_photo;
+
+  Future get_image() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      user_photo = image;
+    });
+  }
+
+  Future upload_image( String id) async {
+    String fileName = Path.basename(user_photo.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('/' + id + '/' + fileName);
+    Database.setUserPhotoName(id, fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(user_photo);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    setState(() {
+      print("Profile Picture uploaded");
+    });
+  }
 
   // Check if form is valid before perform login or signup
   bool validateAndSave() {
@@ -54,6 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
           print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
+          await upload_image(userId);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
@@ -187,44 +215,26 @@ class _SignUpPageState extends State<SignUpPage> {
         height: 0.0,
       );
     } else {
-      if (Storage.getImage() == null) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Container(
-              height: 70,
-              width: 70,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromRGBO(255, 255, 255, 0),
-                border: Border.all(
-                    color: Color.fromRGBO(255, 82, 42, 1), width: 1.0),
-              ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.add_a_photo,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Storage.chooseFile();
-                },
-              )),
-        );
-      } else {
-        return Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Container(
-            height: 70,
-            width: 70,
-            decoration: new BoxDecoration(
-                shape: BoxShape.circle,
-                image: new DecorationImage(
-                    image: AssetImage(Storage.getImage().path),
-                    fit: BoxFit.fill),
-                border: Border.all(
-                    color: Color.fromRGBO(255, 82, 42, 1), width: 1.0)),
+      return CircleAvatar(
+        radius: 37,
+        backgroundColor: Colors.deepOrange,
+        child: ClipOval(
+          child: InkWell(
+            child: new SizedBox(
+                width: 70.0,
+                height: 70.0,
+                child: (user_photo != null)
+                    ? Image.file(
+                        user_photo,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset('assets/user_photo.png')),
+            onTap: () {
+              get_image();
+            },
           ),
-        );
-      }
+        ),
+      );
     }
   }
 
@@ -313,8 +323,10 @@ class _SignUpPageState extends State<SignUpPage> {
               onPressed: _isLoginForm
                   ? validateAndSubmit
                   : () async {
-                      final bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => RegistrationInfo()));
+                      final bool result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegistrationInfo()));
                       if (result) {
                         validateAndSubmit();
                         setState(() {

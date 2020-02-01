@@ -32,11 +32,8 @@ class _RootPageState extends State<RootPage> {
           _userId = user?.uid;
         }
         authStatus =
-            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
         Database.myProfile['id'] = user?.uid;
-        if(Database.myProfile['id']!=null){
-          Database.getMyProfile();
-        }
       });
     });
   }
@@ -68,6 +65,10 @@ class _RootPageState extends State<RootPage> {
     );
   }
 
+  Future load_profile() async {
+    await Database.getMyProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
@@ -82,11 +83,21 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new BottomNavigationBarController(
-            userId: _userId,
-            auth: widget.auth,
-            logoutCallback: logoutCallback,
-          );
+          Database.myProfile['id'] = _userId;
+          return FutureBuilder(
+              future: load_profile(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return BottomNavigationBarController(
+                    userId: _userId,
+                    auth: widget.auth,
+                    logoutCallback: logoutCallback,
+                  );
+                }
+                else {
+                  return CircularProgressIndicator();
+                }
+              });
         } else
           return buildWaitingScreen();
         break;

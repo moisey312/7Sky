@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shimmer/shimmer.dart';
@@ -16,16 +14,20 @@ class GalleryPage extends StatefulWidget {
   createState() => new _GalleryPage();
 }
 
-class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
+class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
   static List<String> photographersAndStudios = new List();
   static List<Widget> cards;
   static List<Widget> images;
 
-  static loadInfo(BuildContext context) async {
+  loadInfo(BuildContext context) async {
     photographersAndStudios = await Database.getPhotographerAndStudioIds();
     await fillListOfCards(context);
   }
+  void state(){
+    setState(() {
 
+    });
+  }
   static Widget photo(String url) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
@@ -41,10 +43,11 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
     );
   }
 
-  static Widget photosOrStudiosCard(BuildContext context, String name, double rating, String price,
-      String id, String profileImageUrl) {
-    bool favorite = false;
-
+  Widget photosOrStudiosCard(BuildContext context, String name,
+      double rating, String price, String id, String profileImageUrl) {
+    bool favorite;
+    List favorites = Database.myProfile['favorites'];
+    favorites.indexOf(id) == null ? favorite = false : favorite = true;
     Color fav_col;
     if (favorite) {
       fav_col = Color.fromRGBO(255, 82, 42, 1);
@@ -57,7 +60,8 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
         child: Container(
           height: 167.0,
           decoration: BoxDecoration(
-              borderRadius: new BorderRadius.circular(10.0), color: Colors.white),
+              borderRadius: new BorderRadius.circular(10.0),
+              color: Colors.white),
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -104,7 +108,7 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
                                     itemCount: 5,
                                     itemSize: 20,
                                     itemPadding:
-                                    EdgeInsets.symmetric(horizontal: 4.0),
+                                        EdgeInsets.symmetric(horizontal: 4.0),
                                     itemBuilder: (context, _) => Icon(
                                       Icons.star,
                                       color: Colors.amber,
@@ -129,7 +133,22 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: IconButton(
                       icon: Icon(Icons.favorite, color: fav_col),
-                      onPressed: () {},
+                      onPressed: () {
+                        print('hello yopta');
+                        setState(() {
+                          favorite = !favorite;
+                          List<dynamic> new_favorites = Database.myProfile['favorites'];
+                          if (favorite) {
+                            fav_col = Color.fromRGBO(255, 82, 42, 1);
+                            new_favorites.add(id);
+                          } else {
+                            fav_col = Colors.black38;
+                            new_favorites.remove(id);
+                          }
+                          print(favorite);
+                          Database.myProfile['favorites'] = new_favorites;
+                        });
+                      },
                     ),
                   )
                 ],
@@ -137,21 +156,25 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
             ],
           ),
         ),
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewProfilePage(userId: id,)));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NewProfilePage(
+                        userId: id,
+                      )));
         },
       ),
     );
   }
-
-  static fillListOfCards(BuildContext context) async {
+  fillListOfCards(BuildContext context) async {
     cards = List<Widget>();
     for (int i = 0; i < photographersAndStudios.length; i++) {
       images = List<Widget>();
       Map<String, Object> a =
-      await Database.getUserProfile(photographersAndStudios[i]);
+          await Database.getUserProfile(photographersAndStudios[i]);
       List urls = a["portfolio_image_names"];
-      if(urls.length==0){
+      if (urls.length == 0) {
         continue;
       }
 
@@ -174,48 +197,69 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor(),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(
-          title: Center(
-              child: Text(
-            "Галерея",
-            style: TextStyle(fontSize: 17),
-          )),
+        backgroundColor: backgroundColor(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            actions: <Widget>[
+
+            ],
+            title: Center(
+                child: Text(
+              "Галерея",
+              style: TextStyle(fontSize: 17),
+            )),
+          ),
         ),
-      ),
-      body: FutureBuilder(
-          future: loadInfo(context),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                if (snapshot.hasError) {
-                  debugPrint("Snapshot " + snapshot.toString());
-                  return new Text('Error: ${snapshot.error}');
-                } else {
-                  debugPrint("Snapshot " + snapshot.toString());
-                  print(cards);
-                  return RefreshIndicator(
-                    child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: cards,
-                    ),
-                    onRefresh: (){setState(() {
-                      cards = null;
-                    });},
-                  );
-                }
-                break;
+        body: cards == null
+            ? FutureBuilder(
+                future: loadInfo(context),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.done:
+                      if (snapshot.hasError) {
+                        debugPrint("Snapshot " + snapshot.toString());
+                        return new Text('Error: ${snapshot.error}');
+                      } else {
+                        debugPrint("Snapshot " + snapshot.toString());
+                        print(cards);
+                        return RefreshIndicator(
+                          child: ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            children: cards,
+                          ),
+                          onRefresh: () {
+                            setState(() {
+                              cards = null;
+                            });
+                          },
+                        );
+                      }
+                      break;
 
-              default:
-                debugPrint("Snapshot " + snapshot.toString());
-                return Shimmer.fromColors(child: Container(height: 167.0,
-                  decoration: BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10.0), color: Colors.white),), baseColor: Colors.black26, highlightColor: Colors.white);
-            }
-          }),
-    );
+                    default:
+                      debugPrint("Snapshot " + snapshot.toString());
+                      return Shimmer.fromColors(
+                          child: Container(
+                            height: 167.0,
+                            decoration: BoxDecoration(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                color: Colors.white),
+                          ),
+                          baseColor: Colors.black26,
+                          highlightColor: Colors.white);
+                  }
+                })
+            : RefreshIndicator(
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: cards,
+                ),
+                onRefresh: () {
+                  setState(() {
+                    cards = null;
+                  });
+                },
+              ));
   }
-
 }

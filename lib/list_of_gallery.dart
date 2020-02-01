@@ -138,7 +138,7 @@ class ListOfGallery {
                                   itemCount: 5,
                                   itemSize: 20,
                                   itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
+                                  EdgeInsets.symmetric(horizontal: 4.0),
                                   itemBuilder: (context, _) => Icon(
                                     Icons.star,
                                     color: Colors.amber,

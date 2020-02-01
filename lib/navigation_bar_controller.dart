@@ -32,8 +32,6 @@ class _BottomNavigationBarControllerState
     ),
   ];
 
-
-
   signOut() async {
     try {
       await widget.auth.signOut();
