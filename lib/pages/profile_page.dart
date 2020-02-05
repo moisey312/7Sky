@@ -1,10 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:testproj/models/firestore.dart';
 import 'package:testproj/pages/root_page.dart';
 import '../choose_photo_for_portfolio.dart';
 import '../models/firestore.dart';
@@ -24,6 +28,23 @@ class _ProfilePage extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
   List<Asset> images = List<Asset>();
+  List<CachedNetworkImageProvider> imagess = List<CachedNetworkImageProvider>();
+
+  void load_my_profile() async {
+    await Database.getMyProfile();
+    await load_portfolio();
+  }
+
+  void load_portfolio() async {
+    if (!Database.myProfile['portfolio_image_names'] == []) {
+      List<dynamic> my_images = Database.myProfile['portfolio_image_names'];
+      for (int i = 0; i < my_images.length; i++) {
+        imagess.add(CachedNetworkImageProvider(await Storage.getUrlPortfolio(
+            Database.myProfile['id'], my_images[i])));
+        print(i);
+      }
+    }
+  }
 
   void _popupDialog(BuildContext context, int index) {
     showDialog(
@@ -53,14 +74,12 @@ class _ProfilePage extends State<ProfilePage>
     return GridView.count(
       crossAxisCount: 3,
       padding: EdgeInsets.all(1),
-      children: List.generate(images.length, (index) {
-        Asset asset = images[index];
+      children: List.generate(imagess.length, (index) {
+        CachedNetworkImageProvider asset = imagess[index];
         return InkWell(
           child: Container(
-            child: AssetThumb(
-              asset: asset,
-              width: 300,
-              height: 300,
+            child: Image(
+              image: asset,
             ),
           ),
           onTap: () {
@@ -88,11 +107,21 @@ class _ProfilePage extends State<ProfilePage>
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    setState(() {
-      for (int i = 0; i < resultList.length; i++) {
-        images.add(resultList[i]);
-      }
-    });
+    for (int i = 0; i < resultList.length; i++) {
+      ByteData a = await resultList[i].getByteData();
+      String fileName = resultList[i].name;
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('/' + Database.myProfile['id'] + '/portfolio/' + fileName);
+      Database.setPortfolioImageNames(fileName);
+      StorageUploadTask uploadTask = storageReference
+          .putData(a.buffer.asUint8List(a.offsetInBytes, a.lengthInBytes));
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+      imagess.add(CachedNetworkImageProvider(
+          await Storage.getUrlPortfolio(Database.myProfile['id'], fileName)));
+      print('gotovo');
+    }
+    setState(() {});
   }
 
   @override
@@ -367,7 +396,7 @@ class _ProfilePage extends State<ProfilePage>
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: Database.myProfile['user_photo_name'] == ''
-                        ? Image.asset('assets/user_photo.png')
+                        ? AssetImage('assets/user_photo.png')
                         : CachedNetworkImageProvider(Storage.user_photo_url),
                     fit: BoxFit.cover,
                   ),
@@ -418,13 +447,12 @@ class _ProfilePage extends State<ProfilePage>
                                 color: Color.fromRGBO(255, 82, 42, 1),
                                 width: 1.0),
                             image: DecorationImage(
-                              image: Database.myProfile['user_photo_name'] == ''
-                                  ? Image.asset('assets/user_photo.png')
-                                  : CachedNetworkImageProvider(
-                                Storage.user_photo_url
-                              ),
-                              fit: BoxFit.cover
-                            ),
+                                image:
+                                    Database.myProfile['user_photo_name'] == ''
+                                        ? AssetImage('assets/user_photo.png')
+                                        : CachedNetworkImageProvider(
+                                            Storage.user_photo_url),
+                                fit: BoxFit.cover),
                           ),
                         )
                       ],

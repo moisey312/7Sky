@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -25,11 +27,11 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
     photographersAndStudios = await Database.getPhotographerAndStudioIds();
     await fillListOfCards(context);
   }
-  void state(){
-    setState(() {
 
-    });
+  void state() {
+    setState(() {});
   }
+
   static Widget photo(BuildContext context, String url) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 6, 0, 0),
@@ -43,24 +45,44 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
             ),
           ),
         ),
-        onTap: (){Navigator.push(
-            context,
-            MaterialPageRoute(
-            builder: (context) => ShowerPhoto(url: url,)));},
+        onTap: () {
+          BuildContext ctx = _scaffold.currentContext;
+          Navigator.push(
+              ctx,
+              MaterialPageRoute(
+                  builder: (ctx) => ShowerPhoto(
+                        url: url,
+                      )));
+        },
       ),
     );
   }
 
-  Widget photosOrStudiosCard(BuildContext context, String name,
-      double rating, String price, String id, String profileImageUrl) {
+  Widget photosOrStudiosCard(BuildContext context, String name, double rating,
+      String price, String id, String profileImageUrl) {
     bool favorite;
-    List favorites = Database.myProfile['favorites'];
-    favorites.indexOf(id) == null ? favorite = false : favorite = true;
+    List<dynamic> favorites = Database.myProfile['favorites'];
+    favorites.indexOf(id) == -1 ? favorite = false : favorite = true;
     Color fav_col;
     if (favorite) {
       fav_col = Color.fromRGBO(255, 82, 42, 1);
     } else {
       fav_col = Colors.black38;
+    }
+    void change_favorite(){
+      favorite = !favorite;
+      List new_favorites =
+      Database.myProfile['favorites'];
+      if (favorite) {
+        fav_col = Color.fromRGBO(255, 82, 42, 1);
+        new_favorites.add(id);
+      } else {
+        fav_col = Colors.black38;
+        new_favorites.remove(id);
+      }
+      print(favorite);
+      Database.myProfile['favorites'] = new_favorites;
+
     }
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
@@ -89,7 +111,8 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                           border: Border.all(color: Colors.black, width: 1.0),
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: CachedNetworkImageProvider(profileImageUrl))),
+                              image:
+                                  profileImageUrl==''?AssetImage('assets/user_photo.jpg'):CachedNetworkImageProvider(profileImageUrl))),
                     ),
                   ),
                   Column(
@@ -143,19 +166,22 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                       icon: Icon(Icons.favorite, color: fav_col),
                       onPressed: () {
                         print('hello yopta');
-                        setState(() {
-                          favorite = !favorite;
-                          List<dynamic> new_favorites = Database.myProfile['favorites'];
-                          if (favorite) {
-                            fav_col = Color.fromRGBO(255, 82, 42, 1);
-                            new_favorites.add(id);
-                          } else {
-                            fav_col = Colors.black38;
-                            new_favorites.remove(id);
-                          }
-                          print(favorite);
-                          Database.myProfile['favorites'] = new_favorites;
-                        });
+                        if (this.mounted) {
+                          setState(() {
+                            favorite = !favorite;
+                            List new_favorites =
+                                Database.myProfile['favorites'];
+                            if (favorite) {
+                              fav_col = Color.fromRGBO(255, 82, 42, 1);
+                              new_favorites.add(id);
+                            } else {
+                              fav_col = Colors.black38;
+                              new_favorites.remove(id);
+                            }
+                            print(favorite);
+                            Database.myProfile['favorites'] = new_favorites;
+                          });
+                        }
                       },
                     ),
                   )
@@ -165,16 +191,18 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
           ),
         ),
         onTap: () {
+          BuildContext ctx = _scaffold.currentContext;
           Navigator.push(
-              context,
+              ctx,
               MaterialPageRoute(
-                  builder: (context) => NewProfilePage(
+                  builder: (ctx) => NewProfilePage(
                         userId: id,
                       )));
         },
       ),
     );
   }
+
   fillListOfCards(BuildContext context) async {
     cards = List<Widget>();
     for (int i = 0; i < photographersAndStudios.length; i++) {
@@ -187,8 +215,10 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
       }
 
       for (int j = 0; j < urls.length && j < 5; j++) {
-        images.add(photo(context, await Storage.getUrlPortfolio(
-            photographersAndStudios[i], urls[j])));
+        images.add(photo(
+            context,
+            await Storage.getUrlPortfolio(
+                photographersAndStudios[i], urls[j])));
       }
       cards.add(photosOrStudiosCard(
           context,
@@ -196,22 +226,22 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
           a["rating"],
           a["price"],
           photographersAndStudios[i],
-          await Storage.getUrlProfileImage(photographersAndStudios[i])));
+          a['user_profile_name']==''?'':await Storage.getUrlProfileImage(photographersAndStudios[i], a['user_photo_name'])));
+      print(a['name']);
     }
     print(cards.toString() + 'cards fill');
     print(photographersAndStudios.toString() + 'ids fill');
   }
-
+  static GlobalKey _scaffold = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffold,
         backgroundColor: backgroundColor(),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(40.0),
           child: AppBar(
-            actions: <Widget>[
-
-            ],
+            actions: <Widget>[],
             title: Center(
                 child: Text(
               "Галерея",
@@ -232,9 +262,12 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                         debugPrint("Snapshot " + snapshot.toString());
                         print(cards);
                         return RefreshIndicator(
-                          child: ListView(
+                          child: ListView.builder(
                             physics: const AlwaysScrollableScrollPhysics(),
-                            children: cards,
+                            itemCount: cards.length,
+                            itemBuilder: (BuildContext context, int Itemindex) {
+                              return cards[Itemindex]; // return your widget
+                            },
                           ),
                           onRefresh: () {
                             setState(() {
@@ -259,10 +292,14 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                   }
                 })
             : RefreshIndicator(
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  children: cards,
-                ),
+                child: ListView.builder(
+                    itemCount: cards.length,
+                    // number of items in your list
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    //here the implementation of itemBuilder. take a look at flutter docs to see details
+                    itemBuilder: (BuildContext context, int Itemindex) {
+                      return cards[Itemindex]; // return your widget
+                    }),
                 onRefresh: () {
                   setState(() {
                     cards = null;

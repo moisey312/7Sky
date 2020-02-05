@@ -45,7 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  Future upload_image( String id) async {
+  Future upload_image(String id) async {
     String fileName = Path.basename(user_photo.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('/' + id + '/' + fileName);
@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
           print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
-          await upload_image(userId);
+          if (user_photo != null) await upload_image(userId);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
