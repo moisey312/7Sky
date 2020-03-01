@@ -31,13 +31,13 @@ class Storage {
     return file;
   }
 
-  static Future getUrlUserPhoto(String id)async{
-    final ref = FirebaseStorage.instance.ref().child('/'+id+'/'+Database.myProfile['user_photo_name']);
+  static Future getUrlUserPhoto()async{
+    final ref = FirebaseStorage.instance.ref().child('/'+Database.myProfile['id']+'/'+Database.myProfile['user_photo_name']);
     var url = await ref.getDownloadURL();
     user_photo_url = url;
   }
-  static Future<String> getUrlProfileImage(String id, String fileName)async{
-    final ref = FirebaseStorage.instance.ref().child('/'+id+'/'+fileName);
+  static Future<String> getUrlProfileImage(String id)async{
+    final ref = FirebaseStorage.instance.ref().child('/'+id+'/profile.jpg');
     var url = await ref.getDownloadURL();
     return url;
   }

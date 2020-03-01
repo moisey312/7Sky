@@ -1,13 +1,7 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:testproj/models/firestore.dart';
-import 'dart:typed_data';
 
-import 'package:testproj/models/storage.dart';
 
 
 class ChooseImagesForPortfolio extends StatefulWidget {
@@ -19,6 +13,7 @@ class ChooseImagesForPortfolio extends StatefulWidget {
 class _ChooseImagesForPortfolioState extends State<ChooseImagesForPortfolio> {
   List<Asset> images = List<Asset>();
   String _error;
+
   @override
   void initState() {
     super.initState();
@@ -45,13 +40,11 @@ class _ChooseImagesForPortfolioState extends State<ChooseImagesForPortfolio> {
 
     List<Asset> resultList;
     String error;
+
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 300,
-
       );
-
-
     } on Exception catch (e) {
       error = e.toString();
     }
@@ -62,12 +55,11 @@ class _ChooseImagesForPortfolioState extends State<ChooseImagesForPortfolio> {
     if (!mounted) return;
 
     setState(() {
-      images.addAll(resultList);
-
+      images = resultList;
       if (error == null) _error = 'No Error Dectected';
     });
+  }
 
-    }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
