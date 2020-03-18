@@ -1,4 +1,4 @@
-package com.example.testproj;
+package com.moikirf.seven_sky;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

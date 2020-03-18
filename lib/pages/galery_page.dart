@@ -226,7 +226,7 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
           a["rating"],
           a["price"],
           photographersAndStudios[i],
-          a['user_profile_name']==''?'':await Storage.getUrlProfileImage(photographersAndStudios[i], a['user_photo_name'])));
+          a['user_profile_name']==''?'':await Storage.getUrlProfileImage(photographersAndStudios[i])));
       print(a['name']);
     }
     print(cards.toString() + 'cards fill');

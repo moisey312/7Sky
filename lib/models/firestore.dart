@@ -116,7 +116,7 @@ class Database {
         }
       });
     }
-    await Storage.getUrlUserPhoto(myProfile['id']);
+    await Storage.getUrlUserPhoto();
     return true;
   }
 

@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:887014485283:android:7da5c7b86c8b8542dc3096",
+        "mobilesdk_app_id": "1:887014485283:android:a41ff8418f9f463bdc3096",
         "android_client_info": {
-          "package_name": "com.example.testproj"
+          "package_name": "com.moikirf.seven_sky"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "887014485283-us8g5bo7to2tt1h6h56su4c9vv12l5s9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moikirf.seven_sky",
+            "certificate_hash": "6cdcd2cbbb85b3e69043bfe15951eb5d41190588"
+          }
+        },
         {
           "client_id": "887014485283-2g2vn7iamiqume34vm9ooh0ks1hn5755.apps.googleusercontent.com",
           "client_type": 3
