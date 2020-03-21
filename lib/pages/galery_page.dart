@@ -69,10 +69,9 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
     } else {
       fav_col = Colors.black38;
     }
-    void change_favorite(){
+    void change_favorite() {
       favorite = !favorite;
-      List new_favorites =
-      Database.myProfile['favorites'];
+      List new_favorites = Database.myProfile['favorites'];
       if (favorite) {
         fav_col = Color.fromRGBO(255, 82, 42, 1);
         new_favorites.add(id);
@@ -82,8 +81,8 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
       }
       print(favorite);
       Database.myProfile['favorites'] = new_favorites;
-
     }
+
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
       child: InkWell(
@@ -111,8 +110,10 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
                           border: Border.all(color: Colors.black, width: 1.0),
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image:
-                                  profileImageUrl==''?AssetImage('assets/user_photo.jpg'):CachedNetworkImageProvider(profileImageUrl))),
+                              image: profileImageUrl == ''
+                                  ? AssetImage('assets/user_photo.jpg')
+                                  : CachedNetworkImageProvider(
+                                      profileImageUrl))),
                     ),
                   ),
                   Column(
@@ -226,13 +227,17 @@ class _GalleryPage extends State<GalleryPage> with WidgetsBindingObserver {
           a["rating"],
           a["price"],
           photographersAndStudios[i],
-          a['user_profile_name']==''?'':await Storage.getUrlProfileImage(photographersAndStudios[i])));
+          a['user_profile_name'] == ''
+              ? ''
+              : await Storage.getUrlProfileImage(photographersAndStudios[i])));
       print(a['name']);
     }
     print(cards.toString() + 'cards fill');
     print(photographersAndStudios.toString() + 'ids fill');
   }
+
   static GlobalKey _scaffold = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

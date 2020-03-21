@@ -44,7 +44,11 @@ class Database {
       await databaseReference
           .collection('users')
           .document(myProfile['id'])
-          .updateData({'user_photo_name': myProfile.containsKey('user_photo_name')?myProfile['user_photo_name']:''});
+          .updateData({
+        'user_photo_name': myProfile.containsKey('user_photo_name')
+            ? myProfile['user_photo_name']
+            : ''
+      });
     }
   }
 

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-
-
 class ChooseImagesForPortfolio extends StatefulWidget {
   @override
-  _ChooseImagesForPortfolioState createState() => new _ChooseImagesForPortfolioState();
+  _ChooseImagesForPortfolioState createState() =>
+      new _ChooseImagesForPortfolioState();
 }
-
 
 class _ChooseImagesForPortfolioState extends State<ChooseImagesForPortfolio> {
   List<Asset> images = List<Asset>();
@@ -63,21 +61,21 @@ class _ChooseImagesForPortfolioState extends State<ChooseImagesForPortfolio> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Column(
-          children: <Widget>[
-            Center(child: Text('Error: $_error')),
-            RaisedButton(
-              child: Text("Pick images"),
-              onPressed: loadAssets,
-            ),
-            Expanded(
-              child: buildGridView(),
-            )
-          ],
-        ),
-      );
+      appBar: new AppBar(
+        title: const Text('Plugin example app'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Center(child: Text('Error: $_error')),
+          RaisedButton(
+            child: Text("Pick images"),
+            onPressed: loadAssets,
+          ),
+          Expanded(
+            child: buildGridView(),
+          )
+        ],
+      ),
+    );
   }
 }

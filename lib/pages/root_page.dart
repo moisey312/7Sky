@@ -9,6 +9,7 @@ enum AuthStatus {
   NOT_LOGGED_IN,
   LOGGED_IN,
 }
+
 //в душе не понимаю что происходит в этом файле, надо разобраться
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -32,7 +33,7 @@ class _RootPageState extends State<RootPage> {
           _userId = user?.uid;
         }
         authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
         Database.myProfile['id'] = user?.uid;
       });
     });
@@ -93,8 +94,7 @@ class _RootPageState extends State<RootPage> {
                     auth: widget.auth,
                     logoutCallback: logoutCallback,
                   );
-                }
-                else {
+                } else {
                   return CircularProgressIndicator();
                 }
               });

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-class Review extends StatelessWidget{
+
+class Review extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -20,11 +21,10 @@ class Review extends StatelessWidget{
               itemCount: 5,
               itemSize: 20,
               itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) =>
-                  Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
               onRatingUpdate: (rating) {
                 print(rating);
               },
@@ -32,12 +32,10 @@ class Review extends StatelessWidget{
           ),
           TextFormField(
             decoration: InputDecoration(
-              fillColor: Colors.white,
-              focusColor: Colors.white,
-              hoverColor: Colors.white
-            ),
+                fillColor: Colors.white,
+                focusColor: Colors.white,
+                hoverColor: Colors.white),
           )
-
         ],
       ),
     );

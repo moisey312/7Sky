@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testproj/models/firestore.dart';
 import 'package:testproj/models/storage.dart';
+
 //целый класс работы с FireBase аутентификацией
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -48,6 +49,7 @@ class Auth implements BaseAuth {
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
+
   Future<void> sendEmailVerification() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
     user.sendEmailVerification();

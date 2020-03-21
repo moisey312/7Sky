@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:testproj/style.dart';
 import 'package:testproj/models/firestore.dart';
-class RegChoose extends StatelessWidget {
 
+class RegChoose extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +97,7 @@ class RegChoose extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     Database.myProfile.remove('typeId');
                     Navigator.pop(context, false);
                   },

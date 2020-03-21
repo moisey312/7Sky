@@ -6,7 +6,9 @@ import 'package:testproj/models/firestore.dart';
 
 class NewProfilePage extends StatefulWidget {
   const NewProfilePage({this.userId});
+
   final String userId;
+
   @override
   createState() => new _NewProfilePage();
 }
@@ -14,6 +16,7 @@ class NewProfilePage extends StatefulWidget {
 class _NewProfilePage extends State<NewProfilePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
+
   @override
   void initState() {
     controller = new TabController(length: 3, vsync: this);
@@ -135,7 +138,8 @@ class _NewProfilePage extends State<NewProfilePage>
           ),
         ),
         Container(
-          child: Center(child: Text('У пользователя пока нет загруженных фотографий')),
+          child: Center(
+              child: Text('У пользователя пока нет загруженных фотографий')),
         ),
         Container(
           child: Center(

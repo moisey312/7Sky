@@ -12,7 +12,6 @@ class ShowerPhoto extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       body: Stack(children: <Widget>[
-
         Container(
           child: PhotoView(
             imageProvider: CachedNetworkImageProvider(url),
@@ -21,10 +20,19 @@ class ShowerPhoto extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left:8.0, top: 8.0),
-          child: Align(alignment: Alignment.topLeft,child: IconButton(icon: Icon(Icons.close, color: Colors.white,), onPressed: (){Navigator.pop(context);},)),
+          padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+          child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
         ),
-
       ]),
     );
   }

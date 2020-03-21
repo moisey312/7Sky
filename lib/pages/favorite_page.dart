@@ -6,19 +6,18 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(
-          title: Center(child: Text("Избранное",
-          style: TextStyle(
-            fontSize: 17
-          ),)),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            title: Center(
+                child: Text(
+              "Избранное",
+              style: TextStyle(fontSize: 17),
+            )),
+          ),
         ),
-      ),
-
-      body: Container(
-        height: 0,
-      )
-    );
+        body: Container(
+          height: 0,
+        ));
   }
 }

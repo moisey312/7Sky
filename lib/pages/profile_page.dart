@@ -97,6 +97,7 @@ class _ProfilePage extends State<ProfilePage>
 
   @override
   void initState() {
+    print(Database.myProfile['user_photo_name']);
     if (Database.myProfile['typeId'] == 0) {
       controller = new TabController(
         length: 2,
@@ -366,8 +367,8 @@ class _ProfilePage extends State<ProfilePage>
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: Database.myProfile['user_photo_name'] == ''
-                        ? Image.asset('assets/user_photo.png')
+                    image: Database.myProfile['user_photo_name'] == null
+                        ? AssetImage('assets/user_photo.png')
                         : CachedNetworkImageProvider(Storage.user_photo_url),
                     fit: BoxFit.cover,
                   ),
@@ -418,13 +419,12 @@ class _ProfilePage extends State<ProfilePage>
                                 color: Color.fromRGBO(255, 82, 42, 1),
                                 width: 1.0),
                             image: DecorationImage(
-                              image: Database.myProfile['user_photo_name'] == ''
-                                  ? Image.asset('assets/user_photo.png')
-                                  : CachedNetworkImageProvider(
-                                Storage.user_photo_url
-                              ),
-                              fit: BoxFit.cover
-                            ),
+                                image:
+                                    Database.myProfile['user_photo_name'] == null
+                                        ? AssetImage('assets/user_photo.png')
+                                        : CachedNetworkImageProvider(
+                                            Storage.user_photo_url),
+                                fit: BoxFit.cover),
                           ),
                         )
                       ],
@@ -497,20 +497,20 @@ class _ProfilePage extends State<ProfilePage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<bool>(
-              future: Database.getMyProfile(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return all();
-                } else {
-                  return Shimmer.fromColors(
-                      child: Container(
-                        height: 298,
-                      ),
-                      baseColor: Colors.black26,
-                      highlightColor: Colors.white);
-                }
-              },
-            ),
+        future: Database.getMyProfile(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return all();
+          } else {
+            return Shimmer.fromColors(
+                child: Container(
+                  height: 298,
+                ),
+                baseColor: Colors.black26,
+                highlightColor: Colors.white);
+          }
+        },
+      ),
     );
   }
 }

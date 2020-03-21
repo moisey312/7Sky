@@ -27,9 +27,7 @@ class _BottomNavigationBarControllerState
     FavoritePage(
       key: PageStorageKey('Page2'),
     ),
-    ProfilePage(
-      key: PageStorageKey('Page3')
-    ),
+    ProfilePage(key: PageStorageKey('Page3')),
   ];
 
   signOut() async {
@@ -40,9 +38,11 @@ class _BottomNavigationBarControllerState
       print(e);
     }
   }
-  void callsignout(){
+
+  void callsignout() {
     signOut();
   }
+
   final PageStorageBucket bucket = PageStorageBucket();
 
   int _selectedIndex = 0;

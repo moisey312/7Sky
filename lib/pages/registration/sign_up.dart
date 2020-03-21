@@ -45,7 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  Future upload_image( String id) async {
+  Future upload_image(String id) async {
     String fileName = Path.basename(user_photo.path);
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('/' + id + '/' + fileName);

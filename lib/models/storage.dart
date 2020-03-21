@@ -11,38 +11,48 @@ String _uploadedFileURL;
 
 class Storage {
   static String user_photo_url;
-  static Future uploadPortfolioPhoto(List<Asset> a ) async{
 
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child(Database.myProfile['id'].toString() + '/portfolio/'+a.elementAt(0).name);
+  static Future uploadPortfolioPhoto(List<Asset> a) async {
+    StorageReference storageReference = FirebaseStorage.instance.ref().child(
+        Database.myProfile['id'].toString() +
+            '/portfolio/' +
+            a.elementAt(0).name);
 
     //StorageUploadTask uploadTask = storageReference.putFile();
     //await uploadTask.onComplete;
     print('File Uploaded');
-
   }
+
   static Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('assets/$path');
 
     final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
     return file;
   }
 
-  static Future getUrlUserPhoto()async{
-    final ref = FirebaseStorage.instance.ref().child('/'+Database.myProfile['id']+'/'+Database.myProfile['user_photo_name']);
+  static Future getUrlUserPhoto() async {
+    final ref = FirebaseStorage.instance.ref().child('/' +
+        Database.myProfile['id'] +
+        '/' +
+        Database.myProfile['user_photo_name']);
     var url = await ref.getDownloadURL();
+
     user_photo_url = url;
   }
-  static Future<String> getUrlProfileImage(String id)async{
-    final ref = FirebaseStorage.instance.ref().child('/'+id+'/profile.jpg');
+
+  static Future<String> getUrlProfileImage(String id) async {
+    final ref = FirebaseStorage.instance.ref().child('/' + id + '/profile.jpg');
     var url = await ref.getDownloadURL();
     return url;
   }
-  static Future<String> getUrlPortfolio(String id, String fileName)async{
-    final ref = FirebaseStorage.instance.ref().child('/'+id + '/portfolio/'+fileName);
+
+  static Future<String> getUrlPortfolio(String id, String fileName) async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('/' + id + '/portfolio/' + fileName);
     var url = await ref.getDownloadURL();
     return url;
   }
